@@ -24,16 +24,17 @@
 	</developers>
 
 	<dependencies>
-                <dependency>
-                        <groupId>commons-lang</groupId>
-                        <artifactId>commons-lang</artifactId>
-                        <version>2.1</version>
-                </dependency>
-        </dependencies>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.1</version>
+		</dependency>
+	</dependencies>
 
 	<scm>
-		<connection>scm:git:git://github.com/jenkinsci/build-user-vars-plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:jenkinsci/build-user-vars-plugin.git</developerConnection>
+		<connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
+		<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
 	</scm>
 
 	<repositories>
