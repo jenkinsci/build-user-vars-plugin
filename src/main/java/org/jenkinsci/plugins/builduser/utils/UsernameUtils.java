@@ -36,7 +36,7 @@ public final class UsernameUtils {
 	 * @param fullName
 	 * 				full name -- string like "Chuck Norris"
 	 * @return
-	 * 				first name
+	 * 				first name ("Chuck")
 	 */
 	public static String getFirstName(String fullName) {
 		String [] parts = StringUtils.trimToEmpty(fullName).split("\\s+");
@@ -48,7 +48,7 @@ public final class UsernameUtils {
 	 * @param fullName
 	 * 				full name -- string like "Chuck Norris"
 	 * @return
-	 * 				last name
+	 * 				last name ("Norris")
 	 */
 	public static String getLastName(String fullName) {
 		String [] parts = StringUtils.trimToEmpty(fullName).split("\\s+");

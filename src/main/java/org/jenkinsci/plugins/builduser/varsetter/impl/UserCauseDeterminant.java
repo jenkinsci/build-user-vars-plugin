@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import hudson.model.Cause.UserCause;
