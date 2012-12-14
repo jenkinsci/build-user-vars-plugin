@@ -1,9 +1,7 @@
 package org.jenkinsci.plugins.builduser;
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
+import hudson.model.*;
 import hudson.model.Cause.UserCause;
 import hudson.model.Cause.UserIdCause;
 import hudson.tasks.BuildWrapper;
@@ -12,6 +10,7 @@ import hudson.tasks.BuildWrapperDescriptor;
 import java.io.IOException;
 import java.util.Map;
 
+import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.builduser.utils.ClassUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
@@ -50,10 +49,24 @@ public class BuildUser extends BuildWrapper {
 	@Override
 	public void makeBuildVariables(AbstractBuild build,
 			Map<String, String> variables) {
+        makeUserBuildVariables(build, variables);
+    }
 
-		/* Use UserIdCause.class if it exists in the system (should be starting from b1.427 of jenkins). */
+    /**
+     * Retrieve user cause that triggered this build and populate variables accordingly
+     */
+    private void makeUserBuildVariables(Run build, Map<String, String> variables) {
+
+        // If build has been triggered form an upstream build, get UserCause from there to set user build variables
+        Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
+        if (upstreamCause != null) {
+            Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
+            Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
+            makeUserBuildVariables(upstream, variables);
+        }
+
+        // Use UserIdCause.class if it exists in the system (should be starting from b1.427 of jenkins).
 		if(ClassUtils.isClassExists(USER_ID_CAUSE_CLASS_NAME)){
-
 			/* Try to use UserIdCause to get & set jenkins user build variables */
 			UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
 			if(new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
@@ -61,13 +74,12 @@ public class BuildUser extends BuildWrapper {
 			}
 		}
 
-		/* Try to use deprecated UserCause to get & set jenkins user build variables */
+		// Try to use deprecated UserCause to get & set jenkins user build variables
 		UserCause userCause = (UserCause) build.getCause(UserCause.class);
 		if(new UserCauseDeterminant().setJenkinsUserBuildVars(userCause, variables)) {
 			return;
-		} 
-
-	}
+		}
+    }
 
 
 	@Extension
