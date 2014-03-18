@@ -1,18 +1,26 @@
 package org.jenkinsci.plugins.builduser;
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.model.*;
+import hudson.model.BuildListener;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.Cause;
 import hudson.model.Cause.UserCause;
 import hudson.model.Cause.UserIdCause;
+import hudson.model.Job;
+import hudson.model.Run;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
+import hudson.triggers.SCMTrigger;
 
 import java.io.IOException;
 import java.util.Map;
 
 import jenkins.model.Jenkins;
+
 import org.jenkinsci.plugins.builduser.utils.ClassUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
+import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserIdCauseDeterminant;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -65,6 +73,12 @@ public class BuildUser extends BuildWrapper {
             makeUserBuildVariables(upstream, variables);
         }
 
+        // set BUILD_USER_NAME to fixed value if the build was triggered by a change in the scm
+        SCMTrigger.SCMTriggerCause scmTriggerCause = (SCMTrigger.SCMTriggerCause) build.getCause(SCMTrigger.SCMTriggerCause.class);
+        if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
+        	return;
+        }
+        
         // Use UserIdCause.class if it exists in the system (should be starting from b1.427 of jenkins).
 		if(ClassUtils.isClassExists(USER_ID_CAUSE_CLASS_NAME)){
 			/* Try to use UserIdCause to get & set jenkins user build variables */
