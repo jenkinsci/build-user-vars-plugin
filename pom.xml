@@ -42,8 +42,8 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
+		<connection>scm:git:https://github.com/jenkinsci/build-user-vars-plugin.git</connection>
+		<developerConnection>scm:git:https://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
 		<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
 	</scm>
 
