@@ -46,10 +46,14 @@ public class BuildUser extends BuildWrapper {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Environment setUp(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
+	public Environment setUp(final AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
 		/* noop */
-		return new Environment() {
-		};
+	    return new Environment() {
+	        @Override
+	        public void buildEnvVars(Map<String, String> env) {
+	          makeUserBuildVariables(build, env);
+	        }
+	      };
 	}
 
 
