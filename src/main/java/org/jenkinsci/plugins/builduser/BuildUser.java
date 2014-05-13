@@ -15,6 +15,7 @@ import hudson.triggers.SCMTrigger;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 import jenkins.model.Jenkins;
 
@@ -67,14 +68,16 @@ public class BuildUser extends BuildWrapper {
     /**
      * Retrieve user cause that triggered this build and populate variables accordingly
      */
-    private void makeUserBuildVariables(Run build, Map<String, String> variables) {
+    private void makeUserBuildVariables(@Nonnull Run build, @Nonnull Map<String, String> variables) {
 
         // If build has been triggered form an upstream build, get UserCause from there to set user build variables
         Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
         if (upstreamCause != null) {
             Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
             Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
-            makeUserBuildVariables(upstream, variables);
+            if (upstream != null) {
+                makeUserBuildVariables(upstream, variables);
+            }
         }
 
         // set BUILD_USER_NAME to fixed value if the build was triggered by a change in the scm
