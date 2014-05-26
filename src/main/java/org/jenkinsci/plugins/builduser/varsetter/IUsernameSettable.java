@@ -27,6 +27,8 @@ public interface IUsernameSettable<T extends Cause> {
 	public static final String BUILD_USER_FIRST_NAME_VAR_NAME = "BUILD_USER_FIRST_NAME";
 	/** Last name of user started build */
 	public static final String BUILD_USER_LAST_NAME_VAR_NAME = "BUILD_USER_LAST_NAME";
+    	/** Email of user started build */
+    	public static final String BUILD_USER_EMAIL = "BUILD_USER_EMAIL";
 	/** Id of user started build */
 	public static final String BUILD_USER_ID = "BUILD_USER_ID";
 	/** Optional value for variable which value couldn't be defined. */
