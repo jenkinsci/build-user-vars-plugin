@@ -9,6 +9,7 @@ import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import hudson.tasks.Mailer;
 import hudson.model.User;
+import hudson.model.UserProperty;
 
 /**
  * This implementation is used to determine build username variables from <b>{@link UserIdCause}</b>.
@@ -35,16 +36,19 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			Map<String, String> variables) {
 		if(null != cause) {
 			String username = cause.getUserName();
-            		String id = cause.getUserId();
-            		User user=User.get(id);
-
-            		String adrs = user.getProperty(Mailer.UserProperty.class).getAddress();
-
-            		variables.put(BUILD_USER_EMAIL, adrs);
 			UsernameUtils.setUsernameVars(username, variables);
 			
-			String userid= StringUtils.trimToEmpty(cause.getUserId());
+			String userid = StringUtils.trimToEmpty(cause.getUserId());
 			variables.put(BUILD_USER_ID, userid);
+			
+            		User user=User.get(userid);
+            		if(null != user) {
+            		    UserProperty prop = user.getProperty(Mailer.UserProperty.class);
+            		    if(null != prop) {
+            		        String adrs = StringUtils.trimToEmpty(((Mailer.UserProperty)prop).getAddress());
+            		        variables.put(BUILD_USER_EMAIL, adrs);
+            		    }
+            		}
 			
 			return true;
 		} else {
