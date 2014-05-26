@@ -35,12 +35,12 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			Map<String, String> variables) {
 		if(null != cause) {
 			String username = cause.getUserName();
-            String id = cause.getUserId();
-            User user=User.get(id);
+            		String id = cause.getUserId();
+            		User user=User.get(id);
 
-            String adrs = user.getProperty(Mailer.UserProperty.class).getAddress();
+            		String adrs = user.getProperty(Mailer.UserProperty.class).getAddress();
 
-            variables.put(BUILD_USER_EMAIL, adrs);
+            		variables.put(BUILD_USER_EMAIL, adrs);
 			UsernameUtils.setUsernameVars(username, variables);
 			
 			String userid= StringUtils.trimToEmpty(cause.getUserId());
