@@ -37,7 +37,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 public class BuildUser extends BuildWrapper {
 
 	private static final String EXTENSION_DISPLAY_NAME = "Set jenkins user build variables";
-	private static final String USER_ID_CAUSE_CLASS_NAME = "hudson.model.Cause$UserIdCause";
 
 
 	@DataBoundConstructor
@@ -88,13 +87,10 @@ public class BuildUser extends BuildWrapper {
         	return;
         }
         
-        // Use UserIdCause.class if it exists in the system (should be starting from b1.427 of jenkins).
-		if(ClassUtils.isClassExists(USER_ID_CAUSE_CLASS_NAME)){
-			/* Try to use UserIdCause to get & set jenkins user build variables */
-			UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
-			if(new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
-				return;
-			}
+		/* Try to use UserIdCause to get & set jenkins user build variables */
+		UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
+		if(new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
+			return;
 		}
 
 		// Try to use deprecated UserCause to get & set jenkins user build variables
