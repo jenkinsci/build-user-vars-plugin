@@ -32,23 +32,22 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
      * <p>
      * <b>{@link UserIdCause}</b> based implementation.
      */
-    public boolean setJenkinsUserBuildVars(UserIdCause cause,
-            Map<String, String> variables) {
-        if(null != cause) {
+    public boolean setJenkinsUserBuildVars(UserIdCause cause, Map<String, String> variables) {
+        if (null != cause) {
             String username = cause.getUserName();
             UsernameUtils.setUsernameVars(username, variables);
 
             String userid = StringUtils.trimToEmpty(cause.getUserId());
             variables.put(BUILD_USER_ID, userid);
 
-                    User user=User.get(userid);
-                    if(null != user) {
-                        UserProperty prop = user.getProperty(Mailer.UserProperty.class);
-                        if(null != prop) {
-                            String adrs = StringUtils.trimToEmpty(((Mailer.UserProperty)prop).getAddress());
-                            variables.put(BUILD_USER_EMAIL, adrs);
-                        }
-                    }
+            User user=User.get(userid);
+            if (null != user) {
+                UserProperty prop = user.getProperty(Mailer.UserProperty.class);
+                if (null != prop) {
+                    String adrs = StringUtils.trimToEmpty(((Mailer.UserProperty)prop).getAddress());
+                    variables.put(BUILD_USER_EMAIL, adrs);
+                }
+            }
 
             return true;
         } else {

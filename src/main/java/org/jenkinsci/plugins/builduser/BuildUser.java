@@ -74,10 +74,10 @@ public class BuildUser extends BuildWrapper {
         if (upstreamCause != null) {
             Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
             if (job != null) {
-            Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
-            if (upstream != null) {
-                makeUserBuildVariables(upstream, variables);
-            }
+                Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
+                if (upstream != null) {
+                    makeUserBuildVariables(upstream, variables);
+                }
             }
         }
 
