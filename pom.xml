@@ -1,58 +1,58 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.jenkins-ci.plugins</groupId>
-		<artifactId>plugin</artifactId>
-		<version>1.450</version>
-	</parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>1.450</version>
+    </parent>
 
-	<artifactId>build-user-vars-plugin</artifactId>
-	<version>1.5-SNAPSHOT</version>
-	<packaging>hpi</packaging>
-	<name>Jenkins user build vars plugin</name>
-	<description>Sets username build variables</description>
+    <artifactId>build-user-vars-plugin</artifactId>
+    <version>1.5-SNAPSHOT</version>
+    <packaging>hpi</packaging>
+    <name>Jenkins user build vars plugin</name>
+    <description>Sets username build variables</description>
 
-	<url>http://wiki.jenkins-ci.org/display/JENKINS/Build+User+Vars+Plugin</url>
+    <url>http://wiki.jenkins-ci.org/display/JENKINS/Build+User+Vars+Plugin</url>
 
-	<licenses>
-		<license>
-			<name>MIT license</name>
-			<comments>All source code is under the MIT license.</comments>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>MIT license</name>
+            <comments>All source code is under the MIT license.</comments>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<id>gkonovalenko</id>
-			<name>Gavriil Konovalenko</name>
-			<email>gkonovalenko@gmail.com</email>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>gkonovalenko</id>
+            <name>Gavriil Konovalenko</name>
+            <email>gkonovalenko@gmail.com</email>
+        </developer>
+    </developers>
 
-	<dependencies>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.1</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.1</version>
+        </dependency>
+    </dependencies>
 
-	<properties>
-		<jenkins.version>1.396</jenkins.version>
-	</properties>
+    <properties>
+        <jenkins.version>1.396</jenkins.version>
+    </properties>
 
-	<scm>
-		<connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
-		<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
-	</scm>
+    <scm>
+        <connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
+        <url>https://github.com/jenkinsci/build-user-vars-plugin</url>
+    </scm>
 
-	<repositories>
-		<repository>
-			<id>repo.jenkins-ci.org</id>
-			<url>http://repo.jenkins-ci.org/public/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
 
 
     <pluginRepositories>

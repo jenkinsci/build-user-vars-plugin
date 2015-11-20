@@ -36,31 +36,31 @@ import org.kohsuke.stapler.DataBoundConstructor;
 @SuppressWarnings("deprecation")
 public class BuildUser extends BuildWrapper {
 
-	private static final String EXTENSION_DISPLAY_NAME = "Set jenkins user build variables";
+    private static final String EXTENSION_DISPLAY_NAME = "Set jenkins user build variables";
 
 
-	@DataBoundConstructor
-	public BuildUser() {
-		//noop
-	}
+    @DataBoundConstructor
+    public BuildUser() {
+        //noop
+    }
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Environment setUp(final AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
-		/* noop */
-	    return new Environment() {
-	        @Override
-	        public void buildEnvVars(Map<String, String> env) {
-	          makeUserBuildVariables(build, env);
-	        }
-	      };
-	}
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Environment setUp(final AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
+        /* noop */
+        return new Environment() {
+            @Override
+            public void buildEnvVars(Map<String, String> env) {
+              makeUserBuildVariables(build, env);
+            }
+          };
+    }
 
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void makeBuildVariables(AbstractBuild build,
-			Map<String, String> variables) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public void makeBuildVariables(AbstractBuild build,
+            Map<String, String> variables) {
         makeUserBuildVariables(build, variables);
     }
 
@@ -74,44 +74,44 @@ public class BuildUser extends BuildWrapper {
         if (upstreamCause != null) {
             Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
             if (job != null) {
-	        Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
-	        if (upstream != null) {
-	            makeUserBuildVariables(upstream, variables);
-	        }
+                Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
+                if (upstream != null) {
+                    makeUserBuildVariables(upstream, variables);
+                }
             }
         }
 
         // set BUILD_USER_NAME to fixed value if the build was triggered by a change in the scm
         SCMTrigger.SCMTriggerCause scmTriggerCause = (SCMTrigger.SCMTriggerCause) build.getCause(SCMTrigger.SCMTriggerCause.class);
         if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
-        	return;
+            return;
         }
-        
-		/* Try to use UserIdCause to get & set jenkins user build variables */
-		UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
-		if(new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
-			return;
-		}
 
-		// Try to use deprecated UserCause to get & set jenkins user build variables
-		UserCause userCause = (UserCause) build.getCause(UserCause.class);
-		if(new UserCauseDeterminant().setJenkinsUserBuildVars(userCause, variables)) {
-			return;
-		}
+        /* Try to use UserIdCause to get & set jenkins user build variables */
+        UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
+        if(new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
+            return;
+        }
+
+        // Try to use deprecated UserCause to get & set jenkins user build variables
+        UserCause userCause = (UserCause) build.getCause(UserCause.class);
+        if(new UserCauseDeterminant().setJenkinsUserBuildVars(userCause, variables)) {
+            return;
+        }
     }
 
 
-	@Extension
-	public static class DescriptorImpl extends BuildWrapperDescriptor {
-		@Override
-		public boolean isApplicable(AbstractProject<?, ?> item) {
-			return true;
-		}
+    @Extension
+    public static class DescriptorImpl extends BuildWrapperDescriptor {
+        @Override
+        public boolean isApplicable(AbstractProject<?, ?> item) {
+            return true;
+        }
 
-		@Override
-		public String getDisplayName() {
-			return EXTENSION_DISPLAY_NAME;
-		}
-	}
+        @Override
+        public String getDisplayName() {
+            return EXTENSION_DISPLAY_NAME;
+        }
+    }
 }
 
