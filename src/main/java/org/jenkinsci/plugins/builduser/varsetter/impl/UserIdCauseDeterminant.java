@@ -24,43 +24,43 @@ import hudson.model.UserProperty;
  * @author GKonovalenko
  */
 public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
-	
-	final Class<UserIdCause> causeClass = UserIdCause.class;
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * <b>{@link UserIdCause}</b> based implementation.
-	 */
-	public boolean setJenkinsUserBuildVars(UserIdCause cause,
-			Map<String, String> variables) {
-		if(null != cause) {
-			String username = cause.getUserName();
-			UsernameUtils.setUsernameVars(username, variables);
-			
-			String userid = StringUtils.trimToEmpty(cause.getUserId());
-			variables.put(BUILD_USER_ID, userid);
-			
-            		User user=User.get(userid);
-            		if(null != user) {
-            		    UserProperty prop = user.getProperty(Mailer.UserProperty.class);
-            		    if(null != prop) {
-            		        String adrs = StringUtils.trimToEmpty(((Mailer.UserProperty)prop).getAddress());
-            		        variables.put(BUILD_USER_EMAIL, adrs);
-            		    }
-            		}
-			
-			return true;
-		} else {
-			return false;
-		}
-	}
+    final Class<UserIdCause> causeClass = UserIdCause.class;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Class<UserIdCause> getUsedCauseClass() {
-		return causeClass;
-	}
+    /**
+     * {@inheritDoc}
+     * <p>
+     * <b>{@link UserIdCause}</b> based implementation.
+     */
+    public boolean setJenkinsUserBuildVars(UserIdCause cause,
+            Map<String, String> variables) {
+        if(null != cause) {
+            String username = cause.getUserName();
+            UsernameUtils.setUsernameVars(username, variables);
+
+            String userid = StringUtils.trimToEmpty(cause.getUserId());
+            variables.put(BUILD_USER_ID, userid);
+
+                    User user=User.get(userid);
+                    if(null != user) {
+                        UserProperty prop = user.getProperty(Mailer.UserProperty.class);
+                        if(null != prop) {
+                            String adrs = StringUtils.trimToEmpty(((Mailer.UserProperty)prop).getAddress());
+                            variables.put(BUILD_USER_EMAIL, adrs);
+                        }
+                    }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<UserIdCause> getUsedCauseClass() {
+        return causeClass;
+    }
 
 }
