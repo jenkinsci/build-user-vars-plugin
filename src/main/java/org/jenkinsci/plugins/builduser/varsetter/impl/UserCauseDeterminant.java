@@ -23,31 +23,30 @@ import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
  */
 @SuppressWarnings("deprecation")
 public class UserCauseDeterminant implements IUsernameSettable<UserCause> {
-	
-	final Class<UserCause> causeClass = UserCause.class;
-	
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * <b>{@link UserCause}</b> based implementation.
-	 */
-	public boolean setJenkinsUserBuildVars(UserCause cause,
-			Map<String, String> variables) {
-		if(null != cause) {
-			String username = cause.getUserName();
-			UsernameUtils.setUsernameVars(username, variables);
-			
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Class<UserCause> getUsedCauseClass() {
-		return causeClass;
-	}
+    final Class<UserCause> causeClass = UserCause.class;
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * <b>{@link UserCause}</b> based implementation.
+     */
+    public boolean setJenkinsUserBuildVars(UserCause cause, Map<String, String> variables) {
+        if(null != cause) {
+            String username = cause.getUserName();
+            UsernameUtils.setUsernameVars(username, variables);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<UserCause> getUsedCauseClass() {
+        return causeClass;
+    }
 
 }

@@ -45,8 +45,8 @@ import org.jvnet.hudson.test.MockBuilder;
  * @author Oleg Nenashev <o.v.nenashev@gmail.com>
  */
 public class BuildUserTest extends HudsonTestCase {
-    
-    
+
+
     @Bug(22974)
     public void testMakeUserBuildVariablesWithoutUpstream() throws Exception {      
         // Initialize
@@ -55,19 +55,19 @@ public class BuildUserTest extends HudsonTestCase {
         childProjects.add(childProject);
         Map<String, String> outputVars = new HashMap<String, String>();
         BuildUser buildUser = new BuildUser();
-        
+
         // Create the parent job
         FreeStyleProject parentProject = createFreeStyleProject();
         parentProject.getBuildersList().add(new MockBuilder(Result.SUCCESS));
         parentProject.getPublishersList().add(new BuildTrigger(childProjects, Result.SUCCESS));
         parentProject.save();
         jenkins.rebuildDependencyGraph();
-        
+
         // Trigger the first job. It should not trigger anything
         FreeStyleBuild upstreamBuild = this.buildAndAssertSuccess(parentProject);
         Thread.sleep(20000);
         Assert.assertEquals(1, childProject.getBuilds().size());
-        
+
         // Register non-existent build as an execution cause
         Build downstreamBuild = childProject.getLastBuild();
         List<CauseAction> actions = downstreamBuild.getActions(CauseAction.class);
@@ -82,7 +82,7 @@ public class BuildUserTest extends HudsonTestCase {
         }
         Assert.assertNotNull("Cannot extract the UpstreamCause", upstreamCause);
         buildUser.makeBuildVariables(downstreamBuild, outputVars); // Just a smoke check
-        
+
         // Delete master build and check the correctness
         upstreamBuild.delete();
         try {
@@ -92,5 +92,5 @@ public class BuildUserTest extends HudsonTestCase {
             fail("MakeBuildVariables() has failed with NPE on non-existent upstream cause");            
         }
     }
-    
+
 }

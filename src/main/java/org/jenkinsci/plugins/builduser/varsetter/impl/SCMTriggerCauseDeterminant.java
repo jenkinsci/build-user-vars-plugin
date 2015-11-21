@@ -10,23 +10,23 @@ import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 
 public class SCMTriggerCauseDeterminant implements IUsernameSettable<SCMTrigger.SCMTriggerCause> {
 
-	final Class<SCMTrigger.SCMTriggerCause> causeClass = SCMTrigger.SCMTriggerCause.class;
-	
-	public boolean setJenkinsUserBuildVars(SCMTriggerCause cause,
-			Map<String, String> variables) {
-		
+    final Class<SCMTrigger.SCMTriggerCause> causeClass = SCMTrigger.SCMTriggerCause.class;
+
+    public boolean setJenkinsUserBuildVars(SCMTriggerCause cause,
+            Map<String, String> variables) {
+
         if (cause != null) {
-			UsernameUtils.setUsernameVars("SCMTrigger", variables);
-			
-			return true;
-		} else {
-			return false;
-		}
-	}
+            UsernameUtils.setUsernameVars("SCMTrigger", variables);
 
-	public Class<SCMTriggerCause> getUsedCauseClass() {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		return causeClass;
-	}
+    public Class<SCMTriggerCause> getUsedCauseClass() {
+
+        return causeClass;
+    }
 
 }
