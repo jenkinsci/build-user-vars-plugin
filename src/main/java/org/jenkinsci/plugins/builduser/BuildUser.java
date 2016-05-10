@@ -94,6 +94,10 @@ public class BuildUser extends SimpleBuildWrapper {
 		}
     }
 
+	@Override
+	protected boolean runPreCheckout() {
+		return true;
+	}
 
 	@Extension
 	public static class DescriptorImpl extends BuildWrapperDescriptor {
