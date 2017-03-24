@@ -23,6 +23,7 @@ import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
 
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
+import org.jenkinsci.plugins.builduser.varsetter.impl.RemoteCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.TimerTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
@@ -92,15 +93,19 @@ public class BuildUser extends SimpleBuildWrapper {
             }
         }
 
-		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm
+		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm, timer or remotly with token
 		SCMTrigger.SCMTriggerCause scmTriggerCause = (SCMTrigger.SCMTriggerCause) build.getCause(SCMTrigger.SCMTriggerCause.class);
 		if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
 			return;
 		}
 
-		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a timer
 		TimerTrigger.TimerTriggerCause timerTriggerCause = (TimerTrigger.TimerTriggerCause) build.getCause(TimerTrigger.TimerTriggerCause.class);
 		if (new TimerTriggerCauseDeterminant().setJenkinsUserBuildVars(timerTriggerCause, variables)) {
+			return;
+		}
+
+		Cause.RemoteCause remoteTriggerCause = (Cause.RemoteCause) build.getCause(Cause.RemoteCause.class);
+		if (new RemoteCauseDeterminant().setJenkinsUserBuildVars(remoteTriggerCause, variables)) {
 			return;
 		}
     }
