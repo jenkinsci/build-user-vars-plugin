@@ -1,4 +1,7 @@
 package org.jenkinsci.plugins.builduser;
+
+import static java.lang.String.format;
+
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -16,12 +19,14 @@ import hudson.triggers.SCMTrigger;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 import hudson.triggers.TimerTrigger;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.RemoteCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
@@ -39,6 +44,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
  */
 @SuppressWarnings("deprecation")
 public class BuildUser extends SimpleBuildWrapper {
+
+	private static final Logger log = Logger.getLogger(BuildUser.class.getName());
 
 	private static final String EXTENSION_DISPLAY_NAME = "Set jenkins user build variables";
 
@@ -108,8 +115,9 @@ public class BuildUser extends SimpleBuildWrapper {
 		if (new RemoteCauseDeterminant().setJenkinsUserBuildVars(remoteTriggerCause, variables)) {
 			return;
 		}
-    }
 
+		log.warning(format("Unsupported cause type(s): %s", StringUtils.join(build.getCauses().iterator(), ", ")));
+	}
 
 	@Extension
 	public static class DescriptorImpl extends BuildWrapperDescriptor {
