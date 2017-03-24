@@ -3,7 +3,6 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Cause;
 import hudson.model.Cause.UserCause;
@@ -19,12 +18,13 @@ import java.util.Map;
 import java.util.HashMap;
 import javax.annotation.Nonnull;
 
+import hudson.triggers.TimerTrigger;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
 
-import org.jenkinsci.plugins.builduser.utils.ClassUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
+import org.jenkinsci.plugins.builduser.varsetter.impl.TimerTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserIdCauseDeterminant;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -80,7 +80,7 @@ public class BuildUser extends SimpleBuildWrapper {
         if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
         	return;
         }
-        
+
 		/* Try to use UserIdCause to get & set jenkins user build variables */
 		UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
 		if(new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
@@ -92,6 +92,16 @@ public class BuildUser extends SimpleBuildWrapper {
 		if(new UserCauseDeterminant().setJenkinsUserBuildVars(userCause, variables)) {
 			return;
 		}
+
+		// Other causes should be checked after as build can be triggered automatically and later rerun manually by a human.
+		// In that case there will be multiple causes and the manually one is preferred to set in a variable.
+
+		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a timer
+		TimerTrigger.TimerTriggerCause timerTriggerCause = (TimerTrigger.TimerTriggerCause) build.getCause(TimerTrigger.TimerTriggerCause.class);
+		if (new TimerTriggerCauseDeterminant().setJenkinsUserBuildVars(timerTriggerCause, variables)) {
+			return;
+		}
+
     }
 
 
