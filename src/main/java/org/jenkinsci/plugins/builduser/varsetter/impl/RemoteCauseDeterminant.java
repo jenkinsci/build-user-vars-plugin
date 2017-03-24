@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
+import static java.lang.String.format;
+
 import java.util.Map;
 
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
@@ -16,7 +18,7 @@ public class RemoteCauseDeterminant implements IUsernameSettable<Cause.RemoteCau
         }
 
         //As of Jenkins 2.51 remote cause is set the build was triggered using token and real user is not set
-        UsernameUtils.setUsernameVars(cause.getShortDescription(), variables);
+        UsernameUtils.setUsernameVars(format("%s %s", cause.getAddr(), cause.getNote()), variables);
         variables.put(BUILD_USER_ID, "remoteTrigger");
         return true;
     }
