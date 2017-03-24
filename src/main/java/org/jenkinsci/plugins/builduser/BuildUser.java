@@ -42,7 +42,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * 
  * @author GKonovalenko
  */
-@SuppressWarnings("deprecation")
 public class BuildUser extends SimpleBuildWrapper {
 
 	private static final Logger log = Logger.getLogger(BuildUser.class.getName());
@@ -80,6 +79,7 @@ public class BuildUser extends SimpleBuildWrapper {
 		}
 
 		// Try to use deprecated UserCause to get & set jenkins user build variables
+		@SuppressWarnings("deprecation")
 		UserCause userCause = (UserCause) build.getCause(UserCause.class);
 		if(new UserCauseDeterminant().setJenkinsUserBuildVars(userCause, variables)) {
 			return;
