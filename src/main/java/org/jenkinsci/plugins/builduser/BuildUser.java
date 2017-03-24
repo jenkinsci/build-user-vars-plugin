@@ -60,26 +60,10 @@ public class BuildUser extends SimpleBuildWrapper {
 
     /**
      * Retrieve user cause that triggered this build and populate variables accordingly
+	 *
+	 * TODO: The whole hierarchy and way of applying could be refactored.
      */
     private void makeUserBuildVariables(@Nonnull Run build, @Nonnull Map<String, String> variables) {
-
-        // If build has been triggered form an upstream build, get UserCause from there to set user build variables
-        Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
-        if (upstreamCause != null) {
-            Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
-            if (job != null) {
-	        Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
-	        if (upstream != null) {
-	            makeUserBuildVariables(upstream, variables);
-	        }
-            }
-        }
-
-        // set BUILD_USER_NAME to fixed value if the build was triggered by a change in the scm
-        SCMTrigger.SCMTriggerCause scmTriggerCause = (SCMTrigger.SCMTriggerCause) build.getCause(SCMTrigger.SCMTriggerCause.class);
-        if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
-        	return;
-        }
 
 		/* Try to use UserIdCause to get & set jenkins user build variables */
 		UserIdCause userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
@@ -94,14 +78,31 @@ public class BuildUser extends SimpleBuildWrapper {
 		}
 
 		// Other causes should be checked after as build can be triggered automatically and later rerun manually by a human.
-		// In that case there will be multiple causes and the manually one is preferred to set in a variable.
+		// In that case there will be multiple causes and the direct manually one is preferred to set in a variable.
+
+		// If build has been triggered form an upstream build, get UserCause from there to set user build variables
+        Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
+        if (upstreamCause != null) {
+            Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
+            if (job != null) {
+	        Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
+	        if (upstream != null) {
+	            makeUserBuildVariables(upstream, variables);
+	        }
+            }
+        }
+
+		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm
+		SCMTrigger.SCMTriggerCause scmTriggerCause = (SCMTrigger.SCMTriggerCause) build.getCause(SCMTrigger.SCMTriggerCause.class);
+		if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
+			return;
+		}
 
 		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a timer
 		TimerTrigger.TimerTriggerCause timerTriggerCause = (TimerTrigger.TimerTriggerCause) build.getCause(TimerTrigger.TimerTriggerCause.class);
 		if (new TimerTriggerCauseDeterminant().setJenkinsUserBuildVars(timerTriggerCause, variables)) {
 			return;
 		}
-
     }
 
 
