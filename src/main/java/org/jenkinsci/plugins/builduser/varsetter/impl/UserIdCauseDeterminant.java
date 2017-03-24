@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
+
+import hudson.security.ACL;
 import hudson.tasks.Mailer;
 import hudson.model.User;
 import hudson.model.UserProperty;
@@ -37,8 +39,9 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 		if(null != cause) {
 			String username = cause.getUserName();
 			UsernameUtils.setUsernameVars(username, variables);
-			
-			String userid = StringUtils.trimToEmpty(cause.getUserId());
+
+			String trimmedUserId = StringUtils.trimToEmpty(cause.getUserId());
+			String userid = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
 			variables.put(BUILD_USER_ID, userid);
 			
             		User user=User.get(userid);
