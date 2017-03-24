@@ -17,6 +17,7 @@ public class SCMTriggerCauseDeterminant implements IUsernameSettable<SCMTrigger.
 		
         if (cause != null) {
 			UsernameUtils.setUsernameVars("SCMTrigger", variables);
+			variables.put(BUILD_USER_ID, "scmTrigger");
 			
 			return true;
 		} else {
