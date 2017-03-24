@@ -85,9 +85,6 @@ public class BuildUser extends SimpleBuildWrapper {
 			return;
 		}
 
-		// Other causes should be checked after as build can be triggered automatically and later rerun manually by a human.
-		// In that case there will be multiple causes and the direct manually one is preferred to set in a variable.
-
 		// If build has been triggered form an upstream build, get UserCause from there to set user build variables
         Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
         if (upstreamCause != null) {
@@ -100,6 +97,12 @@ public class BuildUser extends SimpleBuildWrapper {
             }
         }
 
+		// Other causes should be checked after as build can be triggered automatically and later rerun manually by a human.
+		// In that case there will be multiple causes and the direct manually one is preferred to set in a variable.
+		handleOtherCausesOrLogWarningIfUnhandled(build, variables);
+	}
+
+	private void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run build, @Nonnull Map<String, String> variables) {
 		// set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm, timer or remotly with token
 		SCMTrigger.SCMTriggerCause scmTriggerCause = (SCMTrigger.SCMTriggerCause) build.getCause(SCMTrigger.SCMTriggerCause.class);
 		if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
