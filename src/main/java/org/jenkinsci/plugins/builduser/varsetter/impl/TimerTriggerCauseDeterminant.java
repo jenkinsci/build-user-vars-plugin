@@ -9,8 +9,8 @@ import hudson.triggers.TimerTrigger;
 
 public class TimerTriggerCauseDeterminant implements IUsernameSettable<TimerTrigger.TimerTriggerCause> {
 
-    private static final String TIMER_TRIGGER_DUMMY_USER_NAME = "Timer Trigger";
-    private static final String TIMER_TRIGGER_DUMMY_USER_ID = "timerTrigger";
+	private static final String TIMER_TRIGGER_DUMMY_USER_NAME = "Timer Trigger";
+	private static final String TIMER_TRIGGER_DUMMY_USER_ID = "timer";
 
     @Override
 	public boolean setJenkinsUserBuildVars(TimerTrigger.TimerTriggerCause cause, Map<String, String> variables) {
