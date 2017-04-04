@@ -86,16 +86,17 @@ public class BuildUser extends SimpleBuildWrapper {
 		}
 
 		// If build has been triggered form an upstream build, get UserCause from there to set user build variables
-        Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
-        if (upstreamCause != null) {
-            Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
-            if (job != null) {
-	        Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
-	        if (upstream != null) {
-	            makeUserBuildVariables(upstream, variables);
-	        }
-            }
-        }
+		Cause.UpstreamCause upstreamCause = (Cause.UpstreamCause) build.getCause(Cause.UpstreamCause.class);
+		if (upstreamCause != null) {
+			Job job = Jenkins.getInstance().getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
+			if (job != null) {
+				Run upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
+				if (upstream != null) {
+					makeUserBuildVariables(upstream, variables);
+					return;
+				}
+			}
+		}
 
 		// Other causes should be checked after as build can be triggered automatically and later rerun manually by a human.
 		// In that case there will be multiple causes and the direct manually one is preferred to set in a variable.
