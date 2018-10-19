@@ -1,0 +1,29 @@
+<p>
+Attempts to figure out who was responsible for starting the build and return information about them.
+</p>
+<h1>Return Value</h1>
+<p>
+A <code>java.util.Map</code> will be returned, with as many of the following properties as could be determined:
+</p>
+<table cellspacing="0" cellpadding="1" border="1" bordercolor="black">
+	<tbody>
+		<tr>
+			<th>Property</th><th>Description</th>
+		</tr>
+		<tr>
+			<td>BUILD_USER</td><td>The username of the user that started this build.</td>
+		</tr>
+		<tr>
+			<td>BUILD_USER_EMAIL</td><td>The e-mail address of the user that started this build.</td>
+		</tr>
+		<tr>
+			<td>BUILD_USER_ID</td><td>The "user id" of the user that started this build.</td>
+		</tr>
+		<tr>
+			<td>BUILD_USER_FIRST_NAME</td><td>The first name of the user that started this build.</td>
+		</tr>
+		<tr>
+			<td>BUILD_USER_LAST_NAME</td><td>The last name of the user that started this build.</td>
+		</tr>
+	</tbody>
+</table>
