@@ -4,6 +4,7 @@ import com.sonyericsson.rebuild.RebuildCause;
 
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
+import org.jenkinsci.plugins.builduser.varsetter.impl.TimerTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserIdCauseDeterminant;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -28,6 +29,7 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.triggers.SCMTrigger;
+import hudson.triggers.TimerTrigger;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
 
@@ -98,6 +100,10 @@ public class BuildUser extends SimpleBuildWrapper {
             return;
         }
 
+        TimerTrigger.TimerTriggerCause timerTriggerCause = (TimerTrigger.TimerTriggerCause) build.getCause(TimerTrigger.TimerTriggerCause.class);
+        if (new TimerTriggerCauseDeterminant().setJenkinsUserBuildVars(timerTriggerCause, variables)) {
+            return;
+        }
         /* Try to use UserIdCause to get & set jenkins user build variables */
         userIdCause = (UserIdCause) build.getCause(UserIdCause.class);
         if (new UserIdCauseDeterminant().setJenkinsUserBuildVars(userIdCause, variables)) {
