@@ -27,7 +27,7 @@ during the build:
 
 **Script**  Expand source
 
-``` syntaxhighlighter-pre
+```groovy
 node {
   wrap([$class: 'BuildUser']) {
     def user = env.BUILD_USER_ID
