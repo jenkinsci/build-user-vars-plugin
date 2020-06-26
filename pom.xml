@@ -12,7 +12,7 @@
 	<name>Jenkins user build vars plugin</name>
 	<description>Sets username build variables</description>
 
-	<url>http://wiki.jenkins-ci.org/display/JENKINS/Build+User+Vars+Plugin</url>
+	<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
 
 	<licenses>
 		<license>
