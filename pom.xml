@@ -9,7 +9,7 @@
 	<artifactId>build-user-vars-plugin</artifactId>
 	<version>1.6-SNAPSHOT</version>
 	<packaging>hpi</packaging>
-	<name>Jenkins user build vars plugin</name>
+	<name>Jenkins build user vars plugin</name>
 	<description>Sets username build variables</description>
 
 	<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
