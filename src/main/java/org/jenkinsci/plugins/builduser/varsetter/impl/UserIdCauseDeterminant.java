@@ -5,7 +5,6 @@ import hudson.model.Cause.UserIdCause;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.plugins.builduser.BuildUser;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 
