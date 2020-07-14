@@ -54,13 +54,11 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				GrantedAuthority[] authorities = Jenkins.getInstance().getSecurityRealm().loadUserByUsername(userid).getAuthorities();
 				for (int i = 0; i < authorities.length; i++) {
 					String authorityString = authorities[i].getAuthority();
-					if (authorityString != null) {
-						groupString.append(authorityString);
-					}
-					if (i != authorities.length-1) {
-						groupString.append(",");
+					if (authorityString != null && authorityString.length() > 0) {
+						groupString.append(authorityString).append(",");
 					}
 				}
+				groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
 			} catch (Exception err) {
 				// Error
 				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
