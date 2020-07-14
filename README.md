@@ -14,6 +14,7 @@ user who started the build:
 | BUILD\_USER\_FIRST\_NAME | First name                         |
 | BUILD\_USER\_LAST\_NAME  | Last name                          |
 | BUILD\_USER\_ID          | Jenkins user ID                    |
+| BUILD\_USER\_GROUPS      | Jenkins user groups                |
 | BUILD\_USER\_EMAIL       | Email address                      |
 
 ## Usage example
