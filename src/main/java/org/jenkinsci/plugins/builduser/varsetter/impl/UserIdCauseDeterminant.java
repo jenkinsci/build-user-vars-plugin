@@ -33,7 +33,7 @@ import org.acegisecurity.GrantedAuthority;
 public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 	
 	final Class<UserIdCause> causeClass = UserIdCause.class;
-	private static final Logger log = Logger.getLogger(BuildUser.class.getName());
+	private static final Logger log = Logger.getLogger(UserIdCauseDeterminant.class.getName());
 
 
 	/**
@@ -50,18 +50,23 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			String trimmedUserId = StringUtils.trimToEmpty(cause.getUserId());
 			String userid = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
 			variables.put(BUILD_USER_ID, userid);
-			String groupString = "";
+			StringBuilder groupString = new StringBuilder();
 			try {
 				GrantedAuthority[] authorities = Jenkins.getInstance().getSecurityRealm().loadUserByUsername(userid).getAuthorities();
-				String[] groups = new String[authorities.length];
-				for(int i = 0; i < authorities.length; i++)
-					groups[i] = authorities[i].getAuthority();
-				groupString = String.join(",", groups);
+				for (int i = 0; i < authorities.length; i++) {
+					String authorityString = authorities[i].getAuthority();
+					if (authorityString != "") {
+						groupString.append(authorityString);
+					}
+					if (i != authorities.length-1) {
+						groupString.append(",");
+					}
+				}
 			} catch (Exception err) {
 				// Error
 				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
 			}
-			variables.put(BUILD_USER_VAR_GROUPS, groupString);
+			variables.put(BUILD_USER_VAR_GROUPS, groupString.toString());
 
 
 			User user=User.get(userid);
