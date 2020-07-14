@@ -54,7 +54,7 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				GrantedAuthority[] authorities = Jenkins.getInstance().getSecurityRealm().loadUserByUsername(userid).getAuthorities();
 				for (int i = 0; i < authorities.length; i++) {
 					String authorityString = authorities[i].getAuthority();
-					if (authorityString != "") {
+					if (authorityString != null) {
 						groupString.append(authorityString);
 					}
 					if (i != authorities.length-1) {
