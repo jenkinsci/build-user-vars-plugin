@@ -38,4 +38,4 @@ node {
 
 ## Jenkins core compatibility
 
-This plugin requires Jenkins 1.609+ (since 1.5 version of plugin).
+This plugin requires Jenkins 2.164.1+ (since 1.8 version of plugin).
