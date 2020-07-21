@@ -12,6 +12,9 @@ import hudson.security.ACL;
 import hudson.tasks.Mailer;
 import hudson.model.User;
 import hudson.model.UserProperty;
+import java.util.logging.Logger;
+import jenkins.model.Jenkins;
+import org.acegisecurity.GrantedAuthority;
 
 /**
  * This implementation is used to determine build username variables from <b>{@link UserIdCause}</b>.
@@ -19,6 +22,7 @@ import hudson.model.UserProperty;
  * <ul>
  *   <li>{@link IUsernameSettable#BUILD_USER_ID}</li>
  *   <li>{@link IUsernameSettable#BUILD_USER_VAR_NAME}</li>
+ *   <li>{@link IUsernameSettable#BUILD_USER_VAR_GROUPS}</li>
  *   <li>{@link IUsernameSettable#BUILD_USER_FIRST_NAME_VAR_NAME}</li>
  *   <li>{@link IUsernameSettable#BUILD_USER_LAST_NAME_VAR_NAME}</li>
  * </ul>
@@ -28,6 +32,8 @@ import hudson.model.UserProperty;
 public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 	
 	final Class<UserIdCause> causeClass = UserIdCause.class;
+	private static final Logger log = Logger.getLogger(UserIdCauseDeterminant.class.getName());
+
 
 	/**
 	 * {@inheritDoc}
@@ -43,8 +49,24 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			String trimmedUserId = StringUtils.trimToEmpty(cause.getUserId());
 			String userid = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
 			variables.put(BUILD_USER_ID, userid);
-			
-            		User user=User.get(userid);
+			StringBuilder groupString = new StringBuilder();
+			try {
+				GrantedAuthority[] authorities = Jenkins.getInstanceOrNull().getSecurityRealm().loadUserByUsername(userid).getAuthorities();
+				for (int i = 0; i < authorities.length; i++) {
+					String authorityString = authorities[i].getAuthority();
+					if (authorityString != null && authorityString.length() > 0) {
+						groupString.append(authorityString).append(",");
+					}
+				}
+				groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
+			} catch (Exception err) {
+				// Error
+				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
+			}
+			variables.put(BUILD_USER_VAR_GROUPS, groupString.toString());
+
+
+			User user=User.get(userid);
             		if(null != user) {
             		    UserProperty prop = user.getProperty(Mailer.UserProperty.class);
             		    if(null != prop) {
