@@ -7,7 +7,7 @@
 	</parent>
 
 	<artifactId>build-user-vars-plugin</artifactId>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.7-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 	<name>Jenkins build user vars plugin</name>
 	<description>Sets username build variables</description>
