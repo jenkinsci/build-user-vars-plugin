@@ -19,7 +19,7 @@ public final class UsernameUtils {
 	}
 	
 	/**
-	 * Splits username string to first & last names and sets appropriate build variables.
+	 * Splits username string to first &amp; last names and sets appropriate build variables.
 	 * @param username
 	 *     string with username, usually smth. like "Chuck Norris"
 	 * @param variables
