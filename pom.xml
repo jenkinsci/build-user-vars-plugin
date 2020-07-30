@@ -1,85 +1,85 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.jenkins-ci.plugins</groupId>
-		<artifactId>plugin</artifactId>
-		<version>3.50</version>
-	</parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>3.50</version>
+    </parent>
 
-	<artifactId>build-user-vars-plugin</artifactId>
-	<version>1.8-SNAPSHOT</version>
-	<packaging>hpi</packaging>
-	<name>Jenkins build user vars plugin</name>
-	<description>Sets username build variables</description>
+    <artifactId>build-user-vars-plugin</artifactId>
+    <version>1.7-SNAPSHOT</version>
+    <packaging>hpi</packaging>
+    <name>Jenkins build user vars plugin</name>
+    <description>Sets username build variables</description>
 
-	<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
+    <url>https://github.com/jenkinsci/build-user-vars-plugin</url>
 
-	<licenses>
-		<license>
-			<name>MIT license</name>
-			<comments>All source code is under the MIT license.</comments>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>MIT license</name>
+            <comments>All source code is under the MIT license.</comments>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<id>gkonovalenko</id>
-			<name>Gavriil Konovalenko</name>
-			<email>gkonovalenko@gmail.com</email>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>gkonovalenko</id>
+            <name>Gavriil Konovalenko</name>
+            <email>gkonovalenko@gmail.com</email>
+        </developer>
+    </developers>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins</groupId>
-			<artifactId>mailer</artifactId>
-			<version>1.16</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-                        <scope>test</scope>
-			<version>2.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-easymock</artifactId>
-                        <scope>test</scope>
-			<version>2.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-                        <scope>test</scope>
-			<version>4.0.1</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>mailer</artifactId>
+            <version>1.16</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <scope>test</scope>
+            <version>2.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-easymock</artifactId>
+            <scope>test</scope>
+            <version>2.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <scope>test</scope>
+            <version>4.0.1</version>
+        </dependency>
+    </dependencies>
 
-	<properties>
-	  <jenkins.version>2.164.1</jenkins.version>
-	  <java.level>8</java.level>
-          <maven-javadoc-plugin.version>2.8</maven-javadoc-plugin.version>
-          <findbugs.failOnError>false</findbugs.failOnError>
-	</properties>
+    <properties>
+        <jenkins.version>2.164.1</jenkins.version>
+        <java.level>8</java.level>
+        <maven-javadoc-plugin.version>2.8</maven-javadoc-plugin.version>
+        <findbugs.failOnError>false</findbugs.failOnError>
+    </properties>
 
-	<scm>
-		<connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
-		<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
-	  <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
+        <url>https://github.com/jenkinsci/build-user-vars-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
 
-	<repositories>
-		<repository>
-			<id>repo.jenkins-ci.org</id>
-			<url>https://repo.jenkins-ci.org/public/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
 
 
     <pluginRepositories>
@@ -88,5 +88,4 @@
             <url>https://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
-</project>  
-
+</project>
