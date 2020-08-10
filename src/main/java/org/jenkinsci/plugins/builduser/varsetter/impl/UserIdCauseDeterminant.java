@@ -4,6 +4,7 @@ import hudson.model.Cause.UserIdCause;
 
 import java.util.Map;
 
+import hudson.security.SecurityRealm;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
@@ -15,6 +16,7 @@ import hudson.model.UserProperty;
 import java.util.logging.Logger;
 import jenkins.model.Jenkins;
 import org.acegisecurity.GrantedAuthority;
+import org.jenkinsci.plugins.saml.SamlSecurityRealm;
 
 /**
  * This implementation is used to determine build username variables from <b>{@link UserIdCause}</b>.
@@ -47,11 +49,24 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			UsernameUtils.setUsernameVars(username, variables);
 
 			String trimmedUserId = StringUtils.trimToEmpty(cause.getUserId());
-			String userid = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
-			variables.put(BUILD_USER_ID, userid);
+			String originalUserid = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
+			String userid = originalUserid;
 			StringBuilder groupString = new StringBuilder();
 			try {
-				GrantedAuthority[] authorities = Jenkins.getInstanceOrNull().getSecurityRealm().loadUserByUsername(userid).getAuthorities();
+				SecurityRealm realm = Jenkins.getInstanceOrNull().getSecurityRealm();
+				if (realm instanceof SamlSecurityRealm) {
+					String conversion = ((SamlSecurityRealm)realm).getUsernameCaseConversion();
+					switch(conversion) {
+						case "lowercase":
+							userid = userid.toLowerCase();
+							break;
+						case "uppercase":
+							userid = userid.toUpperCase();
+							break;
+						default:
+					}
+				}
+				GrantedAuthority[] authorities = realm.loadUserByUsername(originalUserid).getAuthorities();
 				for (int i = 0; i < authorities.length; i++) {
 					String authorityString = authorities[i].getAuthority();
 					if (authorityString != null && authorityString.length() > 0) {
@@ -63,10 +78,11 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				// Error
 				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
 			}
+			variables.put(BUILD_USER_ID, userid);
 			variables.put(BUILD_USER_VAR_GROUPS, groupString.toString());
 
 
-			User user=User.get(userid);
+			User user=User.get(originalUserid);
             		if(null != user) {
             		    UserProperty prop = user.getProperty(Mailer.UserProperty.class);
             		    if(null != prop) {
