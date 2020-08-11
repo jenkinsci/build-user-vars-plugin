@@ -53,27 +53,30 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			String userid = originalUserid;
 			StringBuilder groupString = new StringBuilder();
 			try {
-				SecurityRealm realm = Jenkins.getInstanceOrNull().getSecurityRealm();
-				if (realm instanceof SamlSecurityRealm) {
-					String conversion = ((SamlSecurityRealm)realm).getUsernameCaseConversion();
-					switch(conversion) {
-						case "lowercase":
-							userid = userid.toLowerCase();
-							break;
-						case "uppercase":
-							userid = userid.toUpperCase();
-							break;
-						default:
+				Jenkins jenkinsInstance = Jenkins.getInstanceOrNull();
+				if (jenkinsInstance != null) {
+					SecurityRealm realm = jenkinsInstance.getSecurityRealm();
+					if (realm instanceof SamlSecurityRealm) {
+						String conversion = ((SamlSecurityRealm)realm).getUsernameCaseConversion();
+						switch(conversion) {
+							case "lowercase":
+								userid = userid.toLowerCase();
+								break;
+							case "uppercase":
+								userid = userid.toUpperCase();
+								break;
+							default:
+						}
 					}
-				}
-				GrantedAuthority[] authorities = realm.loadUserByUsername(originalUserid).getAuthorities();
-				for (int i = 0; i < authorities.length; i++) {
-					String authorityString = authorities[i].getAuthority();
-					if (authorityString != null && authorityString.length() > 0) {
-						groupString.append(authorityString).append(",");
+					GrantedAuthority[] authorities = realm.loadUserByUsername(originalUserid).getAuthorities();
+					for (int i = 0; i < authorities.length; i++) {
+						String authorityString = authorities[i].getAuthority();
+						if (authorityString != null && authorityString.length() > 0) {
+							groupString.append(authorityString).append(",");
+						}
 					}
+					groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
 				}
-				groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
 			} catch (Exception err) {
 				// Error
 				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
