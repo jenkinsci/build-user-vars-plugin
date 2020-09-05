@@ -14,6 +14,7 @@ user who started the build:
 | BUILD\_USER\_FIRST\_NAME | First name                         |
 | BUILD\_USER\_LAST\_NAME  | Last name                          |
 | BUILD\_USER\_ID          | Jenkins user ID                    |
+| BUILD\_USER\_GROUPS      | Jenkins user groups                |
 | BUILD\_USER\_EMAIL       | Email address                      |
 
 ## Usage example
@@ -37,4 +38,4 @@ node {
 
 ## Jenkins core compatibility
 
-This plugin requires Jenkins 1.609+ (since 1.5 version of plugin).
+This plugin requires Jenkins 2.164.1+.
