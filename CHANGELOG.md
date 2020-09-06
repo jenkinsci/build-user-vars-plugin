@@ -3,6 +3,7 @@
 ### 1.5 (Dec 11, 2015)
 
 - Support for [**Pipeline**](https://github.com/jenkinsci/pipeline-plugin).
+- Requires Jenkins version **1.609** or later.
 
 ### 1.4 (Oct 10, 2014)
 
