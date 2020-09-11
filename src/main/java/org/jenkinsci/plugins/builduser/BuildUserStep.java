@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.builduser;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,63 +19,58 @@ import hudson.model.Run;
 /**
  * Get and return build user variables, see {@link IUsernameSettable}:
  *
- * @see IUsernameSettable
- *
  * @author awitt
+ * @see IUsernameSettable
  */
 public class BuildUserStep extends Step {
 
-	@DataBoundConstructor
-	public BuildUserStep(){}
+    @DataBoundConstructor
+    public BuildUserStep() {
+    }
 
-	@Override
-	public StepExecution start(StepContext context) throws Exception {
-		return new Execution(context);
-	}
+    @Override
+    public StepExecution start(StepContext context) {
+        return new Execution(context);
+    }
 
-	public static class Execution extends StepExecution {
+    public static class Execution extends StepExecution {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		public Execution(StepContext context) {
-			super(context);
-		}
+        public Execution(StepContext context) {
+            super(context);
+        }
 
-		@Override
-		public boolean start() throws Exception {
+        @Override
+        public boolean start() throws Exception {
+            Run<?, ?> build = getContext().get(Run.class);
+            Map<String, String> variables = new HashMap<>();
 
-			Run<?,?> build = getContext().get( Run.class );
-			Map <String, String> variables = new HashMap<String,String>();
+            BuildUser.makeUserBuildVariables(build, variables);
+            getContext().onSuccess(variables);
 
-			BuildUser.makeUserBuildVariables(build, variables);
+            return true;
+        }
+    }
 
-			getContext().onSuccess( variables );
+    @Extension
+    public static class DescriptorImpl extends StepDescriptor {
 
-			return true;
-		}
+        @Override
+        public String getFunctionName() {
+            return "getBuildUser";
+        }
 
-	}
+        @Override
+        public Set<? extends Class<?>> getRequiredContext() {
+            return new HashSet<>(Collections.singletonList(
+                    Run.class // for the build get the user information from
+            ));
+        }
 
-	@Extension
-	public static class DescriptorImpl extends StepDescriptor {
-
-		@Override
-		public String getFunctionName() {
-			return "getBuildUser";
-		}
-
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public Set<? extends Class<?>> getRequiredContext() {
-			return new HashSet(Arrays.asList(
-				Run.class // for the build get the user information from
-			));
-		}
-
-		@Override
-		public String getDisplayName() {
-			return "Get information about the user that started this build.";
-		}
-
-	}
+        @Override
+        public String getDisplayName() {
+            return "Get information about the user that started this build.";
+        }
+    }
 }
