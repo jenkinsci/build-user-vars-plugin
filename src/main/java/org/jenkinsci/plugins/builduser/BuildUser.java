@@ -98,7 +98,7 @@ public class BuildUser extends SimpleBuildWrapper {
         handleOtherCausesOrLogWarningIfUnhandled(build, variables);
     }
 
-    private void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
+    private static void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
         // set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm, timer or remotely with token
         SCMTriggerCause scmTriggerCause = build.getCause(SCMTriggerCause.class);
         if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
