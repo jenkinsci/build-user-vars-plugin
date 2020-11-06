@@ -23,6 +23,8 @@ public interface IUsernameSettable<T extends Cause> {
 	
 	/** Full name of user started build */
 	public static final String BUILD_USER_VAR_NAME = "BUILD_USER";
+	/** Groups username belongs to **/
+	public static final String BUILD_USER_VAR_GROUPS = "BUILD_USER_GROUPS";
 	/** First name of user started build */
 	public static final String BUILD_USER_FIRST_NAME_VAR_NAME = "BUILD_USER_FIRST_NAME";
 	/** Last name of user started build */

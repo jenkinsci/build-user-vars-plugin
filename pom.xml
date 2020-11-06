@@ -1,71 +1,100 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.jenkins-ci.plugins</groupId>
-		<artifactId>plugin</artifactId>
-		<version>1.609.1</version>
-	</parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>3.50</version>
+    </parent>
 
-	<artifactId>build-user-vars-plugin</artifactId>
-	<version>1.6-SNAPSHOT</version>
-	<packaging>hpi</packaging>
-	<name>Jenkins user build vars plugin</name>
-	<description>Sets username build variables</description>
+    <artifactId>build-user-vars-plugin</artifactId>
+    <version>1.7-SNAPSHOT</version>
+    <packaging>hpi</packaging>
+    <name>Jenkins build user vars plugin</name>
+    <description>Sets username build variables</description>
 
-	<url>http://wiki.jenkins-ci.org/display/JENKINS/Build+User+Vars+Plugin</url>
+    <url>https://github.com/jenkinsci/build-user-vars-plugin</url>
 
-	<licenses>
-		<license>
-			<name>MIT license</name>
-			<comments>All source code is under the MIT license.</comments>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>MIT license</name>
+            <comments>All source code is under the MIT license.</comments>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<id>gkonovalenko</id>
-			<name>Gavriil Konovalenko</name>
-			<email>gkonovalenko@gmail.com</email>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>gkonovalenko</id>
+            <name>Gavriil Konovalenko</name>
+            <email>gkonovalenko@gmail.com</email>
+        </developer>
+    </developers>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins</groupId>
-			<artifactId>mailer</artifactId>
-			<version>1.16</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.1</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>mailer</artifactId>
+            <version>1.18</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pac4j</groupId>
+            <artifactId>pac4j-saml</artifactId>
+            <version>1.9.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.shibboleth.utilities</groupId>
+                    <artifactId>java-support</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <scope>test</scope>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>saml</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+    </dependencies>
 
-	<properties>
-		<jenkins.version>1.609.1</jenkins.version>
-	</properties>
+    <properties>
+        <jenkins.version>2.164.1</jenkins.version>
+        <java.level>8</java.level>
+        <maven-javadoc-plugin.version>2.8</maven-javadoc-plugin.version>
+        <findbugs.failOnError>false</findbugs.failOnError>
+    </properties>
 
-	<scm>
-		<connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
-		<url>https://github.com/jenkinsci/build-user-vars-plugin</url>
-	  <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
+        <url>https://github.com/jenkinsci/build-user-vars-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
 
-	<repositories>
-		<repository>
-			<id>repo.jenkins-ci.org</id>
-			<url>http://repo.jenkins-ci.org/public/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
 
 
     <pluginRepositories>
         <pluginRepository>
             <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
+            <url>https://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
-</project>  
-
+</project>
