@@ -7,7 +7,7 @@
     </parent>
 
     <artifactId>build-user-vars-plugin</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.7</version>
     <packaging>hpi</packaging>
     <name>Jenkins build user vars plugin</name>
     <description>Sets username build variables</description>
@@ -80,7 +80,7 @@
         <connection>scm:git:ssh://github.com/jenkinsci/build-user-vars-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/jenkinsci/build-user-vars-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/build-user-vars-plugin</url>
-        <tag>HEAD</tag>
+        <tag>build-user-vars-plugin-1.7</tag>
     </scm>
 
     <repositories>
