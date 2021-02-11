@@ -65,7 +65,7 @@ public class BuildUser extends SimpleBuildWrapper {
      * <p>
      * TODO: The whole hierarchy and way of applying could be refactored.
      */
-    private void makeUserBuildVariables(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
+    public static void makeUserBuildVariables(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
 
         /* Try to use UserIdCause to get & set jenkins user build variables */
         UserIdCause userIdCause = build.getCause(UserIdCause.class);
@@ -98,7 +98,7 @@ public class BuildUser extends SimpleBuildWrapper {
         handleOtherCausesOrLogWarningIfUnhandled(build, variables);
     }
 
-    private void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
+    private static void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
         // set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm, timer or remotely with token
         SCMTriggerCause scmTriggerCause = build.getCause(SCMTriggerCause.class);
         if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {
@@ -132,4 +132,3 @@ public class BuildUser extends SimpleBuildWrapper {
         }
     }
 }
-

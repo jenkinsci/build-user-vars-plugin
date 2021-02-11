@@ -21,21 +21,19 @@ The plugin provides the following environment variables:
 | BUILD\_USER\_GROUPS      | Jenkins user groups                |
 | BUILD\_USER\_EMAIL       | Email address                      |
 
+## Pipeline
+
+```groovy
+node {
+    def user = getBuildUser().BUILD_USER_ID
+}
+```
+
 ## Usage example
 
 Select *Set Jenkins user build variables* and reference the variables during the build:
 
 ![](docs/images/build-user-vars-plugin-sample-usage.png)
-
-## Pipeline Examples
-
-```groovy
-node {
-  wrap([$class: 'BuildUser']) {
-    def user = env.BUILD_USER_ID
-  }
-}
-```
 
 ## Changelog
 
