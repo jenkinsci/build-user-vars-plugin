@@ -66,6 +66,7 @@
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>saml</artifactId>
             <version>1.0.4</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
