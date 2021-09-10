@@ -48,4 +48,4 @@ Prior release notes are available in the plugin repository [changelog](https://g
 
 ## Jenkins core compatibility
 
-This plugin requires Jenkins 2.164.1+.
+This plugin requires Jenkins 2.222.4+.

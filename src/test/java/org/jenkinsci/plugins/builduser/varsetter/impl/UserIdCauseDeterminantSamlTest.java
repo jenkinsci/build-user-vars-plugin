@@ -47,7 +47,7 @@ public class UserIdCauseDeterminantSamlTest {
 
         User.getById(userid, true);
         r.jenkins.setSecurityRealm(realm);
-        Map<String, String> outputVars = new HashMap<String, String>();
+        Map<String, String> outputVars = new HashMap<>();
         UserIdCause cause = new UserIdCause(userid);
         UserIdCauseDeterminant determinant = new UserIdCauseDeterminant();
         determinant.setJenkinsUserBuildVars(cause, outputVars);
