@@ -57,8 +57,8 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				SecurityRealm realm = jenkinsInstance.getSecurityRealm();
 				userid = mapUserId (userid, realm);
 				GrantedAuthority[] authorities = realm.loadUserByUsername(originalUserid).getAuthorities();
-				for (int i = 0; i < authorities.length; i++) {
-					String authorityString = authorities[i].getAuthority();
+				for (GrantedAuthority authority : authorities) {
+					String authorityString = authority.getAuthority();
 					if (authorityString != null && authorityString.length() > 0) {
 						groupString.append(authorityString).append(",");
 					}
@@ -66,7 +66,7 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
 			} catch (Exception err) {
 				// Error
-				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
+				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err));
 			}
 			variables.put(BUILD_USER_ID, userid);
 			variables.put(BUILD_USER_VAR_GROUPS, groupString.toString());
