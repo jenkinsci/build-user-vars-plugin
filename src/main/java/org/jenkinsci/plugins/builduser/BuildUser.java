@@ -31,6 +31,8 @@ import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant
 import org.jenkinsci.plugins.builduser.varsetter.impl.TimerTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.UserIdCauseDeterminant;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
@@ -65,7 +67,8 @@ public class BuildUser extends SimpleBuildWrapper {
      * <p>
      * TODO: The whole hierarchy and way of applying could be refactored.
      */
-    private void makeUserBuildVariables(@NonNull Run<?, ?> build, @NonNull Map<String, String> variables) {
+    @Restricted(NoExternalUse.class)
+    static void makeUserBuildVariables(@NonNull Run<?, ?> build, @NonNull Map<String, String> variables) {
 
         /* Try to use UserIdCause to get & set jenkins user build variables */
         UserIdCause userIdCause = build.getCause(UserIdCause.class);
@@ -98,7 +101,13 @@ public class BuildUser extends SimpleBuildWrapper {
         handleOtherCausesOrLogWarningIfUnhandled(build, variables);
     }
 
+<<<<<<< HEAD
     private void handleOtherCausesOrLogWarningIfUnhandled(@NonNull Run<?, ?> build, @NonNull Map<String, String> variables) {
+||||||| 3910b4f
+    private void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
+=======
+    private static void handleOtherCausesOrLogWarningIfUnhandled(@Nonnull Run<?, ?> build, @Nonnull Map<String, String> variables) {
+>>>>>>> origin/master
         // set BUILD_USER_NAME and ID to fixed value if the build was triggered by a change in the scm, timer or remotely with token
         SCMTriggerCause scmTriggerCause = build.getCause(SCMTriggerCause.class);
         if (new SCMTriggerCauseDeterminant().setJenkinsUserBuildVars(scmTriggerCause, variables)) {

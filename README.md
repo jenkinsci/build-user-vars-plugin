@@ -21,6 +21,10 @@ The plugin provides the following environment variables:
 | BUILD\_USER\_GROUPS      | Jenkins user groups                |
 | BUILD\_USER\_EMAIL       | Email address                      |
 
+## Since 1.8
+
+Set the global option to add build user variables to the environment for all builds (in **Manage Jenkins, Configure System**).
+
 ## Usage example
 
 Select *Set Jenkins user build variables* and reference the variables during the build:
