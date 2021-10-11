@@ -71,14 +71,14 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 			variables.put(BUILD_USER_VAR_GROUPS, groupString.toString());
 
 
-			User user=User.get(originalUserid);
-            		if(null != user) {
-            		    Mailer.UserProperty prop = user.getProperty(Mailer.UserProperty.class);
-            		    if(null != prop) {
-            		        String adrs = StringUtils.trimToEmpty(prop.getAddress());
-            		        variables.put(BUILD_USER_EMAIL, adrs);
-            		    }
-            		}
+			User user = User.getById(originalUserid, false);
+			if (null != user) {
+				Mailer.UserProperty prop = user.getProperty(Mailer.UserProperty.class);
+				if (null != prop) {
+					String adrs = StringUtils.trimToEmpty(prop.getAddress());
+					variables.put(BUILD_USER_EMAIL, adrs);
+				}
+			}
 
 			return true;
 		} else {
