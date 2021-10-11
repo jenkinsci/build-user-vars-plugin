@@ -78,8 +78,7 @@ public class BuildUserTest {
         // Register non-existent build as an execution cause
         Build<FreeStyleProject, FreeStyleBuild> downstreamBuild = childProject.getLastBuild();
         List<CauseAction> actions = downstreamBuild.getActions(CauseAction.class);
-        Assert.assertTrue("CauseAction has not been created properly",
-                actions != null && actions.size() == 1);
+        Assert.assertEquals("CauseAction has not been created properly", 1, actions.size());
         Cause.UpstreamCause upstreamCause = null;
         List<Cause> causes = actions.get(0).getCauses();
         for (Cause cause : causes) {

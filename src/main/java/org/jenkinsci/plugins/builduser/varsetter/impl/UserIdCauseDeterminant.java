@@ -12,7 +12,6 @@ import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import hudson.security.ACL;
 import hudson.tasks.Mailer;
 import hudson.model.User;
-import hudson.model.UserProperty;
 import java.util.logging.Logger;
 import jenkins.model.Jenkins;
 import org.acegisecurity.GrantedAuthority;
@@ -57,8 +56,8 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				SecurityRealm realm = jenkinsInstance.getSecurityRealm();
 				userid = mapUserId (userid, realm);
 				GrantedAuthority[] authorities = realm.loadUserByUsername(originalUserid).getAuthorities();
-				for (int i = 0; i < authorities.length; i++) {
-					String authorityString = authorities[i].getAuthority();
+				for (GrantedAuthority authority : authorities) {
+					String authorityString = authority.getAuthority();
 					if (authorityString != null && authorityString.length() > 0) {
 						groupString.append(authorityString).append(",");
 					}
@@ -66,7 +65,7 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
 			} catch (Exception err) {
 				// Error
-				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err.toString()));
+				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err));
 			}
 			variables.put(BUILD_USER_ID, userid);
 			variables.put(BUILD_USER_VAR_GROUPS, groupString.toString());
@@ -74,9 +73,9 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 
 			User user=User.get(originalUserid);
             		if(null != user) {
-            		    UserProperty prop = user.getProperty(Mailer.UserProperty.class);
+            		    Mailer.UserProperty prop = user.getProperty(Mailer.UserProperty.class);
             		    if(null != prop) {
-            		        String adrs = StringUtils.trimToEmpty(((Mailer.UserProperty)prop).getAddress());
+            		        String adrs = StringUtils.trimToEmpty(prop.getAddress());
             		        variables.put(BUILD_USER_EMAIL, adrs);
             		    }
             		}
