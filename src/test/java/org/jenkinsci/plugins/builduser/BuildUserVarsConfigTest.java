@@ -38,10 +38,8 @@ public class BuildUserVarsConfigTest {
                             BuildUserVarsConfig.get().isAllBuilds());
                 });
         sessions.then(
-                r -> {
-                    assertTrue(
-                            "still there after restart of Jenkins",
-                            BuildUserVarsConfig.get().isAllBuilds());
-                });
+                r -> assertTrue(
+                        "still there after restart of Jenkins",
+                        BuildUserVarsConfig.get().isAllBuilds()));
     }
 }
