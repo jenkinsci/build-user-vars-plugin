@@ -23,6 +23,8 @@
  */
 package org.jenkinsci.plugins.builduser;
 
+import static org.junit.Assert.fail;
+
 import hudson.model.AbstractProject;
 import hudson.model.Build;
 import hudson.model.Cause;
@@ -35,44 +37,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import junit.framework.Assert;
-import org.jvnet.hudson.test.Bug;
-import org.jvnet.hudson.test.HudsonTestCase;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.jvnet.hudson.test.Issue;
+import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockBuilder;
 
 /**
  * Contains tests of {@link BuildUser}.
  * @author Oleg Nenashev <o.v.nenashev@gmail.com>
  */
-public class BuildUserTest extends HudsonTestCase {
-    
-    
-    @Bug(22974)
+public class BuildUserTest {
+
+    @Rule
+    public JenkinsRule r = new JenkinsRule();
+
+    @Issue("JENKINS-22974")
+    @Test
     public void testMakeUserBuildVariablesWithoutUpstream() throws Exception {      
         // Initialize
-        FreeStyleProject childProject = createFreeStyleProject();
-        List<AbstractProject> childProjects = new ArrayList<AbstractProject>(1);
+        FreeStyleProject childProject = r.createFreeStyleProject();
+        List<AbstractProject<?, ?>> childProjects = new ArrayList<>(1);
         childProjects.add(childProject);
-        Map<String, String> outputVars = new HashMap<String, String>();
+        Map<String, String> outputVars = new HashMap<>();
         BuildUser buildUser = new BuildUser();
         
         // Create the parent job
-        FreeStyleProject parentProject = createFreeStyleProject();
+        FreeStyleProject parentProject = r.createFreeStyleProject();
         parentProject.getBuildersList().add(new MockBuilder(Result.SUCCESS));
         parentProject.getPublishersList().add(new BuildTrigger(childProjects, Result.SUCCESS));
         parentProject.save();
-        jenkins.rebuildDependencyGraph();
+        r.jenkins.rebuildDependencyGraph();
         
         // Trigger the first job. It should not trigger anything
-        FreeStyleBuild upstreamBuild = this.buildAndAssertSuccess(parentProject);
+        FreeStyleBuild upstreamBuild = r.buildAndAssertSuccess(parentProject);
         Thread.sleep(20000);
         Assert.assertEquals(1, childProject.getBuilds().size());
         
         // Register non-existent build as an execution cause
-        Build downstreamBuild = childProject.getLastBuild();
+        Build<FreeStyleProject, FreeStyleBuild> downstreamBuild = childProject.getLastBuild();
         List<CauseAction> actions = downstreamBuild.getActions(CauseAction.class);
-        Assert.assertTrue("CauseAction has not been created properly",
-                actions != null && actions.size() == 1);
+        Assert.assertEquals("CauseAction has not been created properly", 1, actions.size());
         Cause.UpstreamCause upstreamCause = null;
         List<Cause> causes = actions.get(0).getCauses();
         for (Cause cause : causes) {
