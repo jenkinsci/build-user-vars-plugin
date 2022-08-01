@@ -73,7 +73,7 @@ public class BuildUserTest {
         // Trigger the first job. It should not trigger anything
         FreeStyleBuild upstreamBuild = r.buildAndAssertSuccess(parentProject);
         Thread.sleep(20000);
-        Assert.assertEquals(1, childProject.getBuilds().size());
+        Assert.assertEquals(1, childProject.getBuilds().toArray().length);
         
         // Register non-existent build as an execution cause
         Build<FreeStyleProject, FreeStyleBuild> downstreamBuild = childProject.getLastBuild();

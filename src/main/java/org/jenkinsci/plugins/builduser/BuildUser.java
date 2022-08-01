@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+import jenkins.branch.BranchEventCause;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
 
@@ -116,6 +117,16 @@ public class BuildUser extends SimpleBuildWrapper {
         RemoteCause remoteTriggerCause = build.getCause(RemoteCause.class);
         if (new RemoteCauseDeterminant().setJenkinsUserBuildVars(remoteTriggerCause, variables)) {
             return;
+        }
+
+        try {
+            BranchEventCause branchEventCause = build.getCause(BranchEventCause.class);
+            if (branchEventCause != null) {
+                // branch event cause does not have to be logged.
+                return;
+            }
+        } catch (NoClassDefFoundError e) {
+            log.fine("It seems the branch-api plugin is not installed, skipping.");
         }
 
         log.warning(() -> "Unsupported cause type(s): " + Arrays.toString(build.getCauses().toArray()));
