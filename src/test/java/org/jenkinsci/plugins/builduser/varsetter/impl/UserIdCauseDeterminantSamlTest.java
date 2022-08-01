@@ -33,6 +33,9 @@ public class UserIdCauseDeterminantSamlTest {
                         userid,
                         "password123",
                         true,
+                        true,
+                        true,
+                        true,
                         grantedAuthorities);
         SamlSecurityRealm realm = EasyMock.mock(SamlSecurityRealm.class);
 
