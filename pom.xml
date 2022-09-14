@@ -52,7 +52,6 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
@@ -63,13 +62,11 @@
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>saml</artifactId>
-            <version>1.0.4</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>branch-api</artifactId>
-            <version>2.1046.v0ca_37783ecc5</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
