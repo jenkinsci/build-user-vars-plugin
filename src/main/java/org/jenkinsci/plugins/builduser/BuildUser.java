@@ -23,10 +23,12 @@ import java.util.logging.Logger;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import jenkins.branch.BranchEventCause;
+import jenkins.branch.BranchIndexingCause;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
 
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
+import org.jenkinsci.plugins.builduser.varsetter.impl.BranchIndexingTriggerDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.RemoteCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
 import org.jenkinsci.plugins.builduser.varsetter.impl.TimerTriggerCauseDeterminant;
@@ -120,6 +122,11 @@ public class BuildUser extends SimpleBuildWrapper {
         }
 
         try {
+            BranchIndexingCause branchIndexingCause = build.getCause(BranchIndexingCause.class);
+            if (new BranchIndexingTriggerDeterminant().setJenkinsUserBuildVars(branchIndexingCause, variables)) {
+                return;
+            }
+
             BranchEventCause branchEventCause = build.getCause(BranchEventCause.class);
             if (branchEventCause != null) {
                 // branch event cause does not have to be logged.
