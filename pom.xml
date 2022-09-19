@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>build-user-vars-plugin</artifactId>
-    <version>1.9</version>
+    <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
     <name>Jenkins build user vars plugin</name>
     <description>Sets username build variables</description>
@@ -72,7 +72,7 @@
     </dependencies>
 
     <properties>
-        <revision>1.9</revision>
+        <revision>1.10</revision>
         <changelist>-SNAPSHOT</changelist>
         <jenkins.version>2.332.1</jenkins.version>
         <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
