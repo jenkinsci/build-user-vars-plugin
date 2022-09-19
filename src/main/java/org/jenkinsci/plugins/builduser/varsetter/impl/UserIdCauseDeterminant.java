@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import hudson.model.Cause.UserIdCause;
 
+import java.util.Collection;
 import java.util.Map;
 
 import hudson.security.SecurityRealm;
@@ -14,8 +15,8 @@ import hudson.tasks.Mailer;
 import hudson.model.User;
 import java.util.logging.Logger;
 import jenkins.model.Jenkins;
-import org.acegisecurity.GrantedAuthority;
 import org.jenkinsci.plugins.saml.SamlSecurityRealm;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * This implementation is used to determine build username variables from <b>{@link UserIdCause}</b>.
@@ -55,7 +56,7 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 				Jenkins jenkinsInstance = Jenkins.get();
 				SecurityRealm realm = jenkinsInstance.getSecurityRealm();
 				userid = mapUserId (userid, realm);
-				GrantedAuthority[] authorities = realm.loadUserByUsername(originalUserid).getAuthorities();
+				Collection<? extends GrantedAuthority> authorities = realm.loadUserByUsername2(originalUserid).getAuthorities();
 				for (GrantedAuthority authority : authorities) {
 					String authorityString = authority.getAuthority();
 					if (authorityString != null && authorityString.length() > 0) {

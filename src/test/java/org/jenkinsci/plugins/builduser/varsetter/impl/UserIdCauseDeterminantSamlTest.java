@@ -1,25 +1,27 @@
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
-import hudson.model.*;
 import hudson.model.Cause.UserIdCause;
 
 import hudson.security.ChainedServletFilter;
 import hudson.security.SecurityRealm;
 import jenkins.model.IdStrategy;
-import org.acegisecurity.GrantedAuthority;
 import org.easymock.EasyMock;
 import org.jenkinsci.plugins.saml.SamlSecurityRealm;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.FilterConfig;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
 import static org.easymock.EasyMock.anyObject;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserIdCauseDeterminantSamlTest {
 
@@ -27,9 +29,9 @@ public class UserIdCauseDeterminantSamlTest {
     public JenkinsRule r = new JenkinsRule();
 
     public Map<String, String> runSamlSecurityRealmTest(JenkinsRule r, String userid, String caseConversion) {
-        GrantedAuthority[] grantedAuthorities = new GrantedAuthority[0];
-        org.acegisecurity.userdetails.User user =
-                new org.acegisecurity.userdetails.User(
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        User user =
+                new User(
                         userid,
                         "password123",
                         true,
@@ -44,11 +46,11 @@ public class UserIdCauseDeterminantSamlTest {
         EasyMock.expect(realm.getSecurityComponents()).andReturn(new SecurityRealm.SecurityComponents());
         EasyMock.expect(realm.createFilter(anyObject(FilterConfig.class))).andReturn(new ChainedServletFilter());
         EasyMock.expect(realm.getUsernameCaseConversion()).andReturn(caseConversion);
-        EasyMock.expect(realm.loadUserByUsername(userid)).andReturn(user).anyTimes();
+        EasyMock.expect(realm.loadUserByUsername2(userid)).andReturn(user).anyTimes();
 
         EasyMock.replay(realm);
 
-        User.getById(userid, true);
+        hudson.model.User.getById(userid, true);
         r.jenkins.setSecurityRealm(realm);
         Map<String, String> outputVars = new HashMap<>();
         UserIdCause cause = new UserIdCause(userid);
