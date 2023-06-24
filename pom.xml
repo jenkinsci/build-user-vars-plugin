@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>4.55</version>
+        <version>4.66</version>
         <relativePath />
     </parent>
 
@@ -21,7 +21,7 @@
             <dependency>
                 <groupId>io.jenkins.tools.bom</groupId>
                 <artifactId>bom-2.361.x</artifactId>
-                <version>1798.vc671fe94856f</version>
+                <version>1887.vda_d0ddb_c15c4</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -53,7 +53,7 @@
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <scope>test</scope>
-            <version>5.0.1</version>
+            <version>5.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
