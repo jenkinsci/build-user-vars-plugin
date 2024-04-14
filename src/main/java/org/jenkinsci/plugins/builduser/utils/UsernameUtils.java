@@ -3,7 +3,8 @@ package org.jenkinsci.plugins.builduser.utils;
 import java.util.Map;
 
 /**
- * Utility class for splitting full username to parts.
+ * Utility class for manipulating and extracting parts from a full username.
+ * This class provides methods to split a full username into first and last names.
  * 
  * @author GKonovalenko
  */
@@ -13,10 +14,10 @@ public final class UsernameUtils {
 	}
 
 	/**
-	 * Splits username string to first & last names and sets appropriate build variables.
+	 * Splits a full username string into first and last names and sets the appropriate build variables.
 	 *
-	 * @param username  string with username, usually something like "Chuck Norris"
-	 * @param variables result map, where to put build variables.
+	 * @param username  The full username string, usually in the format "First Last"
+	 * @param variables A map to store the extracted variables, where to put build variables.
 	 */
 	public static void setUsernameVars(String username, Map<String, String> variables) {
 		variables.put(BuildUserVariable.USERNAME, username);
@@ -25,10 +26,10 @@ public final class UsernameUtils {
 	}
 
 	/**
-	 * Extracts the first name from the full name.
+	 * Extracts the first name from a full name.
 	 *
-	 * @param fullName string like "Chuck Norris"
-	 * @return first name ("Chuck")
+	 * @param fullName The full name string, e.g., "First Last"
+	 * @return The first name ("First")
 	 */
 	public static String getFirstName(String fullName) {
 		if (fullName == null || fullName.trim().isEmpty()) {
@@ -39,10 +40,10 @@ public final class UsernameUtils {
 	}
 
 	/**
-	 * Extracts the last name from the full name.
+	 * Extracts the last name from a full name.
 	 *
-	 * @param fullName full name -- string like "Chuck Norris"
-	 * @return last name ("Norris")
+	 * @param fullName The full name string, e.g., "First Last"
+	 * @return The last name ("Last")
 	 */
 	public static String getLastName(String fullName) {
 		if (fullName == null || fullName.trim().isEmpty()) {
@@ -53,10 +54,10 @@ public final class UsernameUtils {
 	}
 
 	/**
-	 * Splits the full name into parts.
+	 * Splits a full name into its constituent parts.
 	 *
-	 * @param fullName full name -- string like "Chuck Norris"
-	 * @return array containing first and last name
+	 * @param fullName The full name string, e.g., "First Last"
+	 * @return An array containing the first and last name
 	 */
 	private static String[] splitName(String fullName) {
 		return fullName.trim().split("\\s+");
