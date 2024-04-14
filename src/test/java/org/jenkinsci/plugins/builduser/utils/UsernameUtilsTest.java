@@ -1,8 +1,8 @@
 package org.jenkinsci.plugins.builduser.utils;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * 
@@ -45,5 +45,4 @@ public class UsernameUtilsTest {
 		assertEquals("", UsernameUtils.getLastName(name8));
 		assertEquals("", UsernameUtils.getLastName(name9));
 	}
-
 }

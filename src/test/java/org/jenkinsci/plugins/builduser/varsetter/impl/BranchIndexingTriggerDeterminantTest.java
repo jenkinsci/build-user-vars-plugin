@@ -1,7 +1,7 @@
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import jenkins.branch.BranchIndexingCause;
-import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
+import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -33,10 +31,10 @@ public class BranchIndexingTriggerDeterminantTest {
     public void setVarsReturnsTrueWithBuildUsersVarsOnValidCause() throws Exception {
         Map<String, String> variables = new HashMap<>();
         assertTrue(new BranchIndexingTriggerDeterminant().setJenkinsUserBuildVars(mockCause(), variables));
-        assertThat(variables, allOf(hasEntry(IUsernameSettable.BUILD_USER_VAR_NAME, "Branch Indexing"),
-                hasEntry(IUsernameSettable.BUILD_USER_FIRST_NAME_VAR_NAME, "Branch"),
-                hasEntry(IUsernameSettable.BUILD_USER_LAST_NAME_VAR_NAME, "Indexing"),
-                hasEntry(IUsernameSettable.BUILD_USER_ID, "branchIndexing")
+        assertThat(variables, allOf(hasEntry(BuildUserVariable.USERNAME, "Branch Indexing"),
+                hasEntry(BuildUserVariable.FIRST_NAME, "Branch"),
+                hasEntry(BuildUserVariable.LAST_NAME, "Indexing"),
+                hasEntry(BuildUserVariable.ID, "branchIndexing")
         ));
     }
 
