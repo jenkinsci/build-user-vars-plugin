@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.builduser;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -15,28 +16,20 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildWrapperDescriptor;
 import hudson.triggers.SCMTrigger.SCMTriggerCause;
 import hudson.triggers.TimerTrigger.TimerTriggerCause;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.logging.Logger;
-import edu.umd.cs.findbugs.annotations.NonNull;
-
 import jenkins.branch.BranchEventCause;
 import jenkins.branch.BranchIndexingCause;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
-
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
-import org.jenkinsci.plugins.builduser.varsetter.impl.BranchIndexingTriggerDeterminant;
-import org.jenkinsci.plugins.builduser.varsetter.impl.RemoteCauseDeterminant;
-import org.jenkinsci.plugins.builduser.varsetter.impl.SCMTriggerCauseDeterminant;
-import org.jenkinsci.plugins.builduser.varsetter.impl.TimerTriggerCauseDeterminant;
-import org.jenkinsci.plugins.builduser.varsetter.impl.UserCauseDeterminant;
-import org.jenkinsci.plugins.builduser.varsetter.impl.UserIdCauseDeterminant;
+import org.jenkinsci.plugins.builduser.varsetter.impl.*;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This plugin is used to set build user variables, see {@link IUsernameSettable}:
@@ -56,6 +49,7 @@ public class BuildUser extends SimpleBuildWrapper {
         //noop
     }
 
+    @Override
     public void setUp(Context context, Run<?, ?> build, FilePath workspace,
                       Launcher launcher, TaskListener listener, EnvVars initialEnvironment) {
         Map<String, String> variables = new HashMap<>();
