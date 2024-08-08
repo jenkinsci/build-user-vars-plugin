@@ -1,11 +1,11 @@
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
-import java.util.Map;
-
+import hudson.triggers.TimerTrigger;
+import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 
-import hudson.triggers.TimerTrigger;
+import java.util.Map;
 
 public class TimerTriggerCauseDeterminant implements IUsernameSettable<TimerTrigger.TimerTriggerCause> {
 
@@ -19,7 +19,7 @@ public class TimerTriggerCauseDeterminant implements IUsernameSettable<TimerTrig
 		}
 
 		UsernameUtils.setUsernameVars(TIMER_TRIGGER_DUMMY_USER_NAME, variables);
-		variables.put(BUILD_USER_ID, TIMER_TRIGGER_DUMMY_USER_ID);
+		variables.put(BuildUserVariable.ID, TIMER_TRIGGER_DUMMY_USER_ID);
 		return true;
 	}
 
