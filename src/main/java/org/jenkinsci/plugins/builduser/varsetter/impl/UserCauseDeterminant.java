@@ -2,29 +2,21 @@ package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import hudson.model.Cause.UserCause;
 import hudson.model.Cause.UserIdCause;
-
-import java.util.Map;
-
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 
+import java.util.Map;
+
 /**
  * This implementation is used to determine build username variables from  <b>{@link UserCause}</b>.
- * This could be used with legacy version of jenkins, where {@link UserCause} is used instead of
- * {@link UserIdCause} (before b1.427).
- * This will let to get following set of variables:
- * <ul>
- *   <li>{@link IUsernameSettable#BUILD_USER_VAR_NAME}</li>
- *   <li>{@link IUsernameSettable#BUILD_USER_FIRST_NAME_VAR_NAME}</li>
- *   <li>{@link IUsernameSettable#BUILD_USER_LAST_NAME_VAR_NAME}</li>
- * </ul>
+ * This could be used with legacy version of jenkins, where {@link UserCause} is used instead of {@link UserIdCause}.
  * 
  * @author GKonovalenko
  */
 @SuppressWarnings("deprecation")
 public class UserCauseDeterminant implements IUsernameSettable<UserCause> {
-	
-	final Class<UserCause> causeClass = UserCause.class;
+
+	static final Class<UserCause> causeClass = UserCause.class;
 	
 	/**
 	 * {@inheritDoc}

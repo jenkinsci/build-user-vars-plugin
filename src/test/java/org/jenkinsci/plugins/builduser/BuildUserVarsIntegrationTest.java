@@ -1,28 +1,30 @@
 package org.jenkinsci.plugins.builduser;
 
-import static org.junit.Assert.assertEquals;
-
 import hudson.EnvVars;
 import hudson.model.Cause;
 import hudson.model.CauseAction;
 import hudson.model.FreeStyleProject;
 import hudson.model.User;
 import hudson.tasks.Mailer;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.CaptureEnvironmentBuilder;
 import org.jvnet.hudson.test.JenkinsRule;
 
-public class BuildUserVarsIntegrationTest {
+import static org.junit.Assert.assertEquals;
 
-    @Rule public JenkinsRule r = new JenkinsRule();
+public class BuildUserVarsIntegrationTest {
+    public static final String TEST_USER_NAME = "Bob Smith";
+    public static final String TEST_USER_EMAIL = "bob@example.com";
+
+    @Rule
+    public JenkinsRule r = new JenkinsRule();
 
     @Test
     public void smokes() throws Exception {
         User user = User.getById("bob", true);
-        user.setFullName("Bob Smith");
-        user.addProperty(new Mailer.UserProperty("bob@example.com"));
+        user.setFullName(TEST_USER_NAME);
+        user.addProperty(new Mailer.UserProperty(TEST_USER_EMAIL));
         r.jenkins.setSecurityRealm(r.createDummySecurityRealm());
 
         FreeStyleProject p = r.createFreeStyleProject();
@@ -33,11 +35,11 @@ public class BuildUserVarsIntegrationTest {
                 p.scheduleBuild2(0, new CauseAction(new Cause.UserIdCause(user.getId()))));
 
         EnvVars envVars = captureEnvironment.getEnvVars();
-        assertEquals("Bob Smith", envVars.get("BUILD_USER"));
+        assertEquals(TEST_USER_NAME, envVars.get("BUILD_USER"));
         assertEquals("authenticated", envVars.get("BUILD_USER_GROUPS"));
         assertEquals("Bob", envVars.get("BUILD_USER_FIRST_NAME"));
         assertEquals("Smith", envVars.get("BUILD_USER_LAST_NAME"));
-        assertEquals("bob@example.com", envVars.get("BUILD_USER_EMAIL"));
+        assertEquals(TEST_USER_EMAIL, envVars.get("BUILD_USER_EMAIL"));
         assertEquals("bob", envVars.get("BUILD_USER_ID"));
     }
 
@@ -48,8 +50,8 @@ public class BuildUserVarsIntegrationTest {
         config.save();
 
         User user = User.getById("bob", true);
-        user.setFullName("Bob Smith");
-        user.addProperty(new Mailer.UserProperty("bob@example.com"));
+        user.setFullName(TEST_USER_NAME);
+        user.addProperty(new Mailer.UserProperty(TEST_USER_EMAIL));
         r.jenkins.setSecurityRealm(r.createDummySecurityRealm());
 
         FreeStyleProject p = r.createFreeStyleProject();
@@ -59,11 +61,11 @@ public class BuildUserVarsIntegrationTest {
                 p.scheduleBuild2(0, new CauseAction(new Cause.UserIdCause(user.getId()))));
 
         EnvVars envVars = captureEnvironment.getEnvVars();
-        assertEquals("Bob Smith", envVars.get("BUILD_USER"));
+        assertEquals(TEST_USER_NAME, envVars.get("BUILD_USER"));
         assertEquals("authenticated", envVars.get("BUILD_USER_GROUPS"));
         assertEquals("Bob", envVars.get("BUILD_USER_FIRST_NAME"));
         assertEquals("Smith", envVars.get("BUILD_USER_LAST_NAME"));
-        assertEquals("bob@example.com", envVars.get("BUILD_USER_EMAIL"));
+        assertEquals(TEST_USER_EMAIL, envVars.get("BUILD_USER_EMAIL"));
         assertEquals("bob", envVars.get("BUILD_USER_ID"));
     }
 }

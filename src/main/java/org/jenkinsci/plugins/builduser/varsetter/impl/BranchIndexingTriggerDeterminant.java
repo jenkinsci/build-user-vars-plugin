@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import jenkins.branch.BranchIndexingCause;
+import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 
@@ -13,7 +14,7 @@ public class BranchIndexingTriggerDeterminant implements IUsernameSettable<Branc
     public boolean setJenkinsUserBuildVars(BranchIndexingCause cause, Map<String, String> variables) {
         if (cause != null) {
             UsernameUtils.setUsernameVars("Branch Indexing", variables);
-            variables.put(BUILD_USER_ID, "branchIndexing");
+            variables.put(BuildUserVariable.ID, "branchIndexing");
             return true;
         }
         return false;
