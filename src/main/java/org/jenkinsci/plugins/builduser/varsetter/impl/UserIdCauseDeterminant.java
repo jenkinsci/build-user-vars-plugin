@@ -4,7 +4,7 @@ import hudson.model.Cause.UserIdCause;
 import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.SecurityRealm;
-import hudson.tasks.Mailer;
+import hudson.tasks.Mailer.UserProperty;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
@@ -24,8 +24,6 @@ import java.util.logging.Logger;
  */
 public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 
-	static final Class<UserIdCause> causeClass = UserIdCause.class;
-
 	private static final Logger log = Logger.getLogger(UserIdCauseDeterminant.class.getName());
 
 	/**
@@ -34,72 +32,84 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 	 * <b>{@link UserIdCause}</b> based implementation.
 	 */
 	public boolean setJenkinsUserBuildVars(UserIdCause cause, Map<String, String> variables) {
-		if (null != cause) {
-			String username = cause.getUserName();
-			UsernameUtils.setUsernameVars(username, variables);
+        if (cause == null) {
+            return false;
+        }
 
-			String trimmedUserId = StringUtils.trimToEmpty(cause.getUserId());
-			String originalUserid = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
-			String userid = originalUserid;
-			StringBuilder groupString = new StringBuilder();
-			try {
-				Jenkins jenkinsInstance = Jenkins.get();
-				SecurityRealm realm = jenkinsInstance.getSecurityRealm();
-				userid = mapUserId (userid, realm);
-				Collection<? extends GrantedAuthority> authorities = realm.loadUserByUsername2(originalUserid).getAuthorities();
-				for (GrantedAuthority authority : authorities) {
-					String authorityString = authority.getAuthority();
-					if (authorityString != null && !authorityString.isEmpty()) {
-						groupString.append(authorityString).append(",");
-					}
-				}
-				groupString.setLength(groupString.length() == 0 ? 0 : groupString.length() - 1);
-			} catch (Exception err) {
-				log.warning(String.format("Failed to get groups for user: %s error: %s ", userid, err));
-			}
-			variables.put(BuildUserVariable.ID, userid);
-			variables.put(BuildUserVariable.GROUPS, groupString.toString());
+        String username = cause.getUserName();
+        UsernameUtils.setUsernameVars(username, variables);
 
-			User user = User.getById(originalUserid, false);
-			if (null != user) {
-				Mailer.UserProperty prop = user.getProperty(Mailer.UserProperty.class);
-				if (null != prop) {
-					String address = StringUtils.trimToEmpty(prop.getAddress());
-					variables.put(BuildUserVariable.EMAIL, address);
-				}
-			}
+        String trimmedUserId = StringUtils.trimToEmpty(cause.getUserId());
+        String originalUserId = trimmedUserId.isEmpty() ? ACL.ANONYMOUS_USERNAME : trimmedUserId;
+        String userid = mapUserId(originalUserId);
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+        variables.put(BuildUserVariable.ID, userid);
+        variables.put(BuildUserVariable.GROUPS, getUserGroups(originalUserId));
 
-	private String mapUserId(String userid, SecurityRealm realm) {
+		setUserEmail(originalUserId, variables);
+
+        return true;
+    }
+
+	private String mapUserId(String userId) {
 		try {
+			SecurityRealm realm = Jenkins.get().getSecurityRealm();
 			if (realm instanceof SamlSecurityRealm) {
 				String conversion = ((SamlSecurityRealm) realm).getUsernameCaseConversion();
 				switch (conversion) {
-				case "lowercase":
-					userid = userid.toLowerCase();
-					break;
-				case "uppercase":
-					userid = userid.toUpperCase();
-					break;
-				default:
+					case "lowercase":
+						return userId.toLowerCase();
+					case "uppercase":
+						return userId.toUpperCase();
+					default:
+						return userId;
 				}
 			}
 		} catch (NoClassDefFoundError e) {
 			log.fine("It seems the saml plugin is not installed, skipping saml user name mapping.");
 		}
-		return userid;
+		return userId;
+	}
+
+	private String getUserGroups(String userId) {
+		StringBuilder groupString = new StringBuilder();
+		try {
+			SecurityRealm realm = Jenkins.get().getSecurityRealm();
+			Collection<? extends GrantedAuthority> authorities = realm.loadUserByUsername2(userId).getAuthorities();
+			for (GrantedAuthority authority : authorities) {
+				String authorityString = authority.getAuthority();
+				if (authorityString != null && !authorityString.isEmpty()) {
+					groupString.append(authorityString).append(",");
+				}
+			}
+			if (groupString.length() > 0) {
+				groupString.setLength(groupString.length() - 1); // Remove trailing comma
+			}
+		} catch (Exception err) {
+			log.warning(String.format("Failed to get groups for user: %s error: %s ", userId, err));
+		}
+		return groupString.toString();
+	}
+
+	private void setUserEmail(String userId, Map<String, String> variables) {
+		User user = User.getById(userId, false);
+		if (user == null) {
+			return;
+		}
+
+		UserProperty prop = user.getProperty(UserProperty.class);
+		if (prop == null) {
+			return;
+		}
+
+		String address = StringUtils.trimToEmpty(prop.getAddress());
+		variables.put(BuildUserVariable.EMAIL, address);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Class<UserIdCause> getUsedCauseClass() {
-		return causeClass;
+		return UserIdCause.class;
 	}
-
 }

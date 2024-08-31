@@ -16,30 +16,26 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class UserCauseDeterminant implements IUsernameSettable<UserCause> {
 
-	static final Class<UserCause> causeClass = UserCause.class;
-	
 	/**
 	 * {@inheritDoc}
 	 * <p>
 	 * <b>{@link UserCause}</b> based implementation.
 	 */
-	public boolean setJenkinsUserBuildVars(UserCause cause,
-			Map<String, String> variables) {
-		if(null != cause) {
-			String username = cause.getUserName();
-			UsernameUtils.setUsernameVars(username, variables);
-			
-			return true;
-		} else {
-			return false;
-		}
-	}
+	public boolean setJenkinsUserBuildVars(UserCause cause, Map<String, String> variables) {
+        if (cause == null) {
+            return false;
+        }
+
+        String username = cause.getUserName();
+        UsernameUtils.setUsernameVars(username, variables);
+
+        return true;
+    }
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Class<UserCause> getUsedCauseClass() {
-		return causeClass;
+		return UserCause.class;
 	}
-
 }

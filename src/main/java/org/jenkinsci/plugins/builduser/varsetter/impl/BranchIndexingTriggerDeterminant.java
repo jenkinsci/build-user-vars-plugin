@@ -8,20 +8,20 @@ import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import java.util.Map;
 
 public class BranchIndexingTriggerDeterminant implements IUsernameSettable<BranchIndexingCause> {
-    private static final Class<BranchIndexingCause> causeClass = BranchIndexingCause.class;
 
     @Override
     public boolean setJenkinsUserBuildVars(BranchIndexingCause cause, Map<String, String> variables) {
-        if (cause != null) {
-            UsernameUtils.setUsernameVars("Branch Indexing", variables);
-            variables.put(BuildUserVariable.ID, "branchIndexing");
-            return true;
+        if (cause == null) {
+            return false;
         }
-        return false;
+
+        UsernameUtils.setUsernameVars("Branch Indexing", variables);
+        variables.put(BuildUserVariable.ID, "branchIndexing");
+        return true;
     }
 
     @Override
     public Class<BranchIndexingCause> getUsedCauseClass() {
-        return causeClass;
+        return BranchIndexingCause.class;
     }
 }
