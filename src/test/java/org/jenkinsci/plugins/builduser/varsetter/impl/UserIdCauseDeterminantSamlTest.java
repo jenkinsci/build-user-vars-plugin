@@ -13,7 +13,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import javax.servlet.FilterConfig;
+import jakarta.servlet.FilterConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
