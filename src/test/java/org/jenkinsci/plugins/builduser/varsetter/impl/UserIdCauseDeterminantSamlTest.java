@@ -1,7 +1,7 @@
 package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import hudson.model.Cause.UserIdCause;
-import hudson.security.ChainedServletFilter;
+import hudson.security.ChainedServletFilter2;
 import hudson.security.SecurityRealm;
 import jenkins.model.IdStrategy;
 import org.easymock.EasyMock;
@@ -37,7 +37,7 @@ public class UserIdCauseDeterminantSamlTest {
         IdStrategy strategy = new IdStrategy.CaseSensitive();
         EasyMock.expect(realm.getUserIdStrategy()).andReturn(strategy).anyTimes();
         EasyMock.expect(realm.getSecurityComponents()).andReturn(new SecurityRealm.SecurityComponents());
-        EasyMock.expect(realm.createFilter(anyObject(FilterConfig.class))).andReturn(new ChainedServletFilter());
+        EasyMock.expect(realm.createFilter(anyObject(FilterConfig.class))).andReturn(new ChainedServletFilter2());
         EasyMock.expect(realm.getUsernameCaseConversion()).andReturn(caseConversion);
         EasyMock.expect(realm.loadUserByUsername2(userid)).andReturn(user).anyTimes();
 
