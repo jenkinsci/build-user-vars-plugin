@@ -75,8 +75,7 @@
 
     <properties>
         <changelist>999999-SNAPSHOT</changelist>
-        <!-- TODO https://github.com/jenkinsci/jenkins/pull/9696 -->
-        <jenkins.version>2.476-rc35313.0144a_9701da_2</jenkins.version>
+        <jenkins.version>2.476</jenkins.version>
         <!-- TODO JENKINS-73339 until in parent POM -->
         <jenkins-test-harness.version>2265.v3da_49c8134d6</jenkins-test-harness.version>
         <maven.compiler.release>17</maven.compiler.release>
