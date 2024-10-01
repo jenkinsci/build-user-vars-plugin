@@ -35,9 +35,17 @@ Select *Set Jenkins user build variables* and reference the variables during the
 
 ```groovy
 node {
-  wrap([$class: 'BuildUser']) {
+  withBuildUser {
     def user = env.BUILD_USER_ID
   }
+}
+```
+
+or with declarative option:
+  
+```groovy
+options {
+  withBuildUser()
 }
 ```
 

@@ -20,6 +20,7 @@ import jenkins.branch.BranchEventCause;
 import jenkins.branch.BranchIndexingCause;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
+import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.*;
 import org.kohsuke.accmod.Restricted;
@@ -134,6 +135,7 @@ public class BuildUser extends SimpleBuildWrapper {
     }
 
     @Extension
+    @Symbol("withBuildUser")
     public static class DescriptorImpl extends BuildWrapperDescriptor {
         @Override
         public boolean isApplicable(AbstractProject<?, ?> item) {
