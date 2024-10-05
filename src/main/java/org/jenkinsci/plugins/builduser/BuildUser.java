@@ -133,6 +133,11 @@ public class BuildUser extends SimpleBuildWrapper {
 
         log.warning(() -> "Unsupported cause type(s): " + Arrays.toString(build.getCauses().toArray()));
     }
+  
+    @Override
+	  protected boolean runPreCheckout() {
+		    return true;
+	  }
 
     @Extension
     @Symbol("withBuildUser")
