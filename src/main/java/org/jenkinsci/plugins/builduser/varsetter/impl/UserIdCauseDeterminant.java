@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * This implementation is used to determine build username variables from <b>{@link UserIdCause}</b>.
@@ -70,23 +71,17 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 	}
 
 	private String getUserGroups(String userId) {
-		StringBuilder groupString = new StringBuilder();
 		try {
 			SecurityRealm realm = Jenkins.get().getSecurityRealm();
 			Collection<? extends GrantedAuthority> authorities = realm.loadUserByUsername2(userId).getAuthorities();
-			for (GrantedAuthority authority : authorities) {
-				String authorityString = authority.getAuthority();
-				if (authorityString != null && !authorityString.isEmpty()) {
-					groupString.append(authorityString).append(",");
-				}
-			}
-			if (!groupString.isEmpty()) {
-				groupString.setLength(groupString.length() - 1); // Remove trailing comma
-			}
+			return authorities.stream()
+					.map(GrantedAuthority::getAuthority)
+					.filter(authority -> authority != null && !authority.isEmpty())
+					.collect(Collectors.joining(","));
 		} catch (Exception err) {
 			log.warning(String.format("Failed to get groups for user: %s error: %s ", userId, err));
+			return "";
 		}
-		return groupString.toString();
 	}
 
 	private void setUserEmail(String userId, Map<String, String> variables) {
