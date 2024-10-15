@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -89,18 +90,11 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 	}
 
 	private void setUserEmail(String userId, Map<String, String> variables) {
-		User user = User.getById(userId, false);
-		if (user == null) {
-			return;
-		}
-
-		UserProperty prop = user.getProperty(UserProperty.class);
-		if (prop == null) {
-			return;
-		}
-
-		String address = StringUtils.trimToEmpty(prop.getAddress());
-		variables.put(BuildUserVariable.EMAIL, address);
+		Optional.ofNullable(User.getById(userId, false))
+				.map(user -> user.getProperty(UserProperty.class))
+				.map(UserProperty::getAddress)
+				.map(StringUtils::trimToEmpty)
+				.ifPresent(address -> variables.put(BuildUserVariable.EMAIL, address));
 	}
 
 	/**
