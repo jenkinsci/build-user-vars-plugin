@@ -46,8 +46,8 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
         String userid = mapUserId(originalUserId);
 
         variables.put(BuildUserVariable.ID, userid);
-        variables.put(BuildUserVariable.GROUPS, getUserGroups(originalUserId));
 
+		setUserGroups(originalUserId, variables);
 		setUserEmail(originalUserId, variables);
 
         return true;
@@ -70,17 +70,21 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 		return userId;
 	}
 
-	private String getUserGroups(String userId) {
+	private void setUserGroups(String userId, Map<String, String> variables) {
 		try {
 			SecurityRealm realm = Jenkins.get().getSecurityRealm();
 			Collection<? extends GrantedAuthority> authorities = realm.loadUserByUsername2(userId).getAuthorities();
-			return authorities.stream()
+
+			String groups = authorities.stream()
 					.map(GrantedAuthority::getAuthority)
 					.filter(authority -> authority != null && !authority.isEmpty())
 					.collect(Collectors.joining(","));
+
+			if (!groups.isEmpty()) {
+				variables.put(BuildUserVariable.GROUPS, groups);
+			}
 		} catch (Exception err) {
 			log.warning(String.format("Failed to get groups for user: %s error: %s ", userId, err));
-			return "";
 		}
 	}
 
