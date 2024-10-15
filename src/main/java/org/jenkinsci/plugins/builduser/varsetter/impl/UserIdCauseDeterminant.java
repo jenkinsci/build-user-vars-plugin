@@ -54,16 +54,13 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 	private String mapUserId(String userId) {
 		try {
 			SecurityRealm realm = Jenkins.get().getSecurityRealm();
-			if (realm instanceof SamlSecurityRealm) {
-				String conversion = ((SamlSecurityRealm) realm).getUsernameCaseConversion();
-				switch (conversion) {
-					case "lowercase":
-						return userId.toLowerCase();
-					case "uppercase":
-						return userId.toUpperCase();
-					default:
-						return userId;
-				}
+			if (realm instanceof SamlSecurityRealm samlSecurityRealm) {
+				String conversion = samlSecurityRealm.getUsernameCaseConversion();
+                return switch (conversion) {
+                    case "lowercase" -> userId.toLowerCase();
+                    case "uppercase" -> userId.toUpperCase();
+                    default -> userId;
+                };
 			}
 		} catch (NoClassDefFoundError e) {
 			log.fine("It seems the saml plugin is not installed, skipping saml user name mapping.");
@@ -82,7 +79,7 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 					groupString.append(authorityString).append(",");
 				}
 			}
-			if (groupString.length() > 0) {
+			if (!groupString.isEmpty()) {
 				groupString.setLength(groupString.length() - 1); // Remove trailing comma
 			}
 		} catch (Exception err) {
