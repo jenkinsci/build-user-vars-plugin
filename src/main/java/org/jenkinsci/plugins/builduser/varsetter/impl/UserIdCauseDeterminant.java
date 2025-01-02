@@ -4,7 +4,7 @@ import hudson.model.Cause.UserIdCause;
 import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.SecurityRealm;
-import hudson.tasks.Mailer.UserProperty;
+import hudson.tasks.MailAddressResolver;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
@@ -90,10 +90,8 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 
 	private void setUserEmail(String userId, Map<String, String> variables) {
 		Optional.ofNullable(User.getById(userId, false))
-				.map(user -> user.getProperty(UserProperty.class))
-				.map(UserProperty::getAddress)
-				.map(StringUtils::trimToEmpty)
-				.ifPresent(address -> variables.put(BuildUserVariable.EMAIL, address));
+				.map(MailAddressResolver::resolve)
+				.ifPresent(email -> variables.put(BuildUserVariable.EMAIL, email));
 	}
 
 	/**
