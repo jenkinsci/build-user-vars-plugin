@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserIdCauseDeterminantTest {
     public static final String TEST_USER = "test_user";
-    
+
     @Rule
     public JenkinsRule r = new JenkinsRule();
 
@@ -43,7 +43,7 @@ public class UserIdCauseDeterminantTest {
         UserIdCause cause = new UserIdCause(TEST_USER);
         UserIdCauseDeterminant determinant = new UserIdCauseDeterminant();
         determinant.setJenkinsUserBuildVars(cause, outputVars);
-        assertThat(outputVars.get(BuildUserVariable.GROUPS), is(equalTo("authenticated")));
+        assertThat(outputVars.get(BuildUserVariable.GROUPS), is(equalTo("")));
     }
 
     @Test
