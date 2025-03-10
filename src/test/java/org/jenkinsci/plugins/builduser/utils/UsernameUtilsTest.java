@@ -1,20 +1,20 @@
 package org.jenkinsci.plugins.builduser.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * 
  * @author GKonovalenko
  */
-public class UsernameUtilsTest {
+class UsernameUtilsTest {
 
-	@Test
-	public void testGetFirstName() {
+    @Test
+    void testGetFirstName() {
 		assertEquals("First", UsernameUtils.getFirstName("First Second"));
 		assertEquals("First", UsernameUtils.getFirstName("First               Second"));
 		assertEquals("First", UsernameUtils.getFirstName("First\tSecond"));
@@ -26,8 +26,8 @@ public class UsernameUtilsTest {
 		assertEquals("", UsernameUtils.getFirstName(null));
 	}
 
-	@Test
-	public void testGetLastName() {
+    @Test
+    void testGetLastName() {
 		assertEquals("Second", UsernameUtils.getLastName("First Second"));
 		assertEquals("Second", UsernameUtils.getLastName("First               Second"));
 		assertEquals("Second", UsernameUtils.getLastName("First\tSecond"));
@@ -39,8 +39,8 @@ public class UsernameUtilsTest {
 		assertEquals("", UsernameUtils.getLastName(null));
 	}
 
-	@Test
-	public void testSetUsernameVars() {
+    @Test
+    void testSetUsernameVars() {
 		Map<String, String> variables = new HashMap<>();
 		UsernameUtils.setUsernameVars("John Doe", variables);
 		assertEquals("John Doe", variables.get(BuildUserVariable.USERNAME));
