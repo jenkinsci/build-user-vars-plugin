@@ -2,7 +2,7 @@ package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import hudson.model.Cause.RemoteCause;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.Collections;
@@ -11,24 +11,25 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RemoteCauseDeterminantTest {
+class RemoteCauseDeterminantTest {
+
     @Test
-    public void usedCauseClassIsRemoteCause() {
+    void usedCauseClassIsRemoteCause() {
         assertThat(new RemoteCauseDeterminant().getUsedCauseClass(), equalTo(RemoteCause.class));
     }
 
     @Test
-    public void setVarsReturnsFalseWithoutBuildUserVarsOnNullCause() {
+    void setVarsReturnsFalseWithoutBuildUserVarsOnNullCause() {
         Map<String, String> variables = new HashMap<>();
         assertFalse(new RemoteCauseDeterminant().setJenkinsUserBuildVars(null, variables));
         assertThat(variables, equalTo(Collections.emptyMap()));
     }
 
     @Test
-    public void setVarsReturnsTrueWithBuildUsersVarsOnValidCause() throws Exception {
+    void setVarsReturnsTrueWithBuildUsersVarsOnValidCause() throws Exception {
         Map<String, String> variables = new HashMap<>();
         assertTrue(new RemoteCauseDeterminant().setJenkinsUserBuildVars(mockCause(), variables));
         assertThat(variables, allOf(hasEntry(BuildUserVariable.USERNAME, "host note"),
@@ -38,7 +39,7 @@ public class RemoteCauseDeterminantTest {
         ));
     }
 
-    private RemoteCause mockCause() throws Exception {
+    private static RemoteCause mockCause() throws Exception {
         Constructor<RemoteCause> ctor = RemoteCause.class.getDeclaredConstructor(String.class, String.class);
         ctor.setAccessible(true);
         return ctor.newInstance("host", "note");

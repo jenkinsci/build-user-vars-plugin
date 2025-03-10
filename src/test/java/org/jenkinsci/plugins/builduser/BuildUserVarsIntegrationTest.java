@@ -6,22 +6,20 @@ import hudson.model.CauseAction;
 import hudson.model.FreeStyleProject;
 import hudson.model.User;
 import hudson.tasks.Mailer;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.CaptureEnvironmentBuilder;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BuildUserVarsIntegrationTest {
-    public static final String TEST_USER_NAME = "Bob Smith";
-    public static final String TEST_USER_EMAIL = "bob@example.com";
-
-    @Rule
-    public JenkinsRule r = new JenkinsRule();
+@WithJenkins
+class BuildUserVarsIntegrationTest {
+    private static final String TEST_USER_NAME = "Bob Smith";
+    private static final String TEST_USER_EMAIL = "bob@example.com";
 
     @Test
-    public void smokes() throws Exception {
+    void smokes(JenkinsRule r) throws Exception {
         User user = User.getById("bob", true);
         user.setFullName(TEST_USER_NAME);
         user.addProperty(new Mailer.UserProperty(TEST_USER_EMAIL));
@@ -44,7 +42,7 @@ public class BuildUserVarsIntegrationTest {
     }
 
     @Test
-    public void allBuilds() throws Exception {
+    void allBuilds(JenkinsRule r) throws Exception {
         BuildUserVarsConfig config = BuildUserVarsConfig.get();
         config.setAllBuilds(true);
         config.save();

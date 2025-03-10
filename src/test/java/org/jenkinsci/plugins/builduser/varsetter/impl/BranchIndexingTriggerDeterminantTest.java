@@ -2,7 +2,7 @@ package org.jenkinsci.plugins.builduser.varsetter.impl;
 
 import jenkins.branch.BranchIndexingCause;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.Collections;
@@ -11,24 +11,25 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BranchIndexingTriggerDeterminantTest {
+class BranchIndexingTriggerDeterminantTest {
+
     @Test
-    public void usedCauseClassIsBranchIndexingCause() {
+    void usedCauseClassIsBranchIndexingCause() {
         assertThat(new BranchIndexingTriggerDeterminant().getUsedCauseClass(), equalTo(BranchIndexingCause.class));
     }
 
     @Test
-    public void setVarsReturnsFalseWithoutBuildUserVarsOnNullCause() {
+    void setVarsReturnsFalseWithoutBuildUserVarsOnNullCause() {
         Map<String, String> variables = new HashMap<>();
         assertFalse(new BranchIndexingTriggerDeterminant().setJenkinsUserBuildVars(null, variables));
         assertThat(variables, equalTo(Collections.emptyMap()));
     }
 
     @Test
-    public void setVarsReturnsTrueWithBuildUsersVarsOnValidCause() throws Exception {
+    void setVarsReturnsTrueWithBuildUsersVarsOnValidCause() throws Exception {
         Map<String, String> variables = new HashMap<>();
         assertTrue(new BranchIndexingTriggerDeterminant().setJenkinsUserBuildVars(mockCause(), variables));
         assertThat(variables, allOf(hasEntry(BuildUserVariable.USERNAME, "Branch Indexing"),
@@ -38,7 +39,7 @@ public class BranchIndexingTriggerDeterminantTest {
         ));
     }
 
-    private BranchIndexingCause mockCause() throws Exception {
+    private static BranchIndexingCause mockCause() throws Exception {
         Constructor<BranchIndexingCause> ctor = BranchIndexingCause.class.getDeclaredConstructor();
         ctor.setAccessible(true);
         return ctor.newInstance();
