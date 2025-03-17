@@ -11,10 +11,8 @@ import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.saml.SamlSecurityRealm;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -73,7 +71,6 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 
     private void setUserGroups(String userId, Map<String, String> variables) {
         try {
-            SecurityRealm realm = Jenkins.get().getSecurityRealm();
             Optional.ofNullable(User.getById(userId, false))
                     .map(User::impersonate2)
                     .map(authentication -> authentication.getAuthorities().stream()
