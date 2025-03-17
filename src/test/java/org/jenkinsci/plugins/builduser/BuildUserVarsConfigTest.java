@@ -1,18 +1,17 @@
 package org.jenkinsci.plugins.builduser;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.htmlunit.html.HtmlCheckBoxInput;
 import org.htmlunit.html.HtmlForm;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.jvnet.hudson.test.JenkinsSessionRule;
+import org.junit.jupiter.api.Test;
+import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class BuildUserVarsConfigTest {
-
-    @Rule public JenkinsSessionRule sessions = new JenkinsSessionRule();
+@WithJenkins
+class BuildUserVarsConfigTest {
 
     /**
      * Tries to exercise enough code paths to catch common mistakes:
@@ -25,21 +24,20 @@ public class BuildUserVarsConfigTest {
      * </ul>
      */
     @Test
-    public void uiAndStorage() throws Throwable {
-        sessions.then(
-                r -> {
-                    assertFalse("not set initially", BuildUserVarsConfig.get().isAllBuilds());
-                    HtmlForm config = r.createWebClient().goTo("configure").getFormByName("config");
-                    HtmlCheckBoxInput checkbox = config.getInputByName("_.allBuilds");
-                    checkbox.setChecked(true);
-                    r.submit(config);
-                    assertTrue(
-                            "global config page let us edit it",
-                            BuildUserVarsConfig.get().isAllBuilds());
-                });
-        sessions.then(
-                r -> assertTrue(
-                        "still there after restart of Jenkins",
-                        BuildUserVarsConfig.get().isAllBuilds()));
+    void uiAndStorage(JenkinsRule r) throws Throwable {
+        assertFalse(BuildUserVarsConfig.get().isAllBuilds(), "not set initially");
+        HtmlForm config = r.createWebClient().goTo("configure").getFormByName("config");
+        HtmlCheckBoxInput checkbox = config.getInputByName("_.allBuilds");
+        checkbox.setChecked(true);
+        r.submit(config);
+        assertTrue(
+                BuildUserVarsConfig.get().isAllBuilds(),
+                "global config page let us edit it");
+
+        r.restart();
+
+        assertTrue(
+                BuildUserVarsConfig.get().isAllBuilds(),
+                "still there after restart of Jenkins");
     }
 }

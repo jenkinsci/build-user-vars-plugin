@@ -7,9 +7,9 @@ import jenkins.model.IdStrategy;
 import org.easymock.EasyMock;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.jenkinsci.plugins.saml.SamlSecurityRealm;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -23,13 +23,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class UserIdCauseDeterminantSamlTest {
-    public static final String TEST_USER = "Testuser";
+@WithJenkins
+class UserIdCauseDeterminantSamlTest {
+    private static final String TEST_USER = "Testuser";
 
-    @Rule
-    public JenkinsRule r = new JenkinsRule();
-
-    public Map<String, String> runSamlSecurityRealmTest(JenkinsRule r, String userid, String caseConversion) {
+    private static Map<String, String> runSamlSecurityRealmTest(JenkinsRule r, String userid, String caseConversion) {
         ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         User user = new User(userid, "password123", true, true, true, true, grantedAuthorities);
         SamlSecurityRealm realm = EasyMock.mock(SamlSecurityRealm.class);
@@ -53,19 +51,19 @@ public class UserIdCauseDeterminantSamlTest {
     }
 
     @Test
-    public void testSetJenkinsUserBuildVarsSamlUpperCase() {
+    void testSetJenkinsUserBuildVarsSamlUpperCase(JenkinsRule r) {
         Map<String, String> outputVars = runSamlSecurityRealmTest(r, TEST_USER, "uppercase");
         assertThat(outputVars.get(BuildUserVariable.ID), is(equalTo("TESTUSER")));
     }
 
     @Test
-    public void testSetJenkinsUserBuildVarsSamlLowerCase() {
+    void testSetJenkinsUserBuildVarsSamlLowerCase(JenkinsRule r) {
         Map<String, String> outputVars = runSamlSecurityRealmTest(r, TEST_USER, "lowercase");
         assertThat(outputVars.get(BuildUserVariable.ID), is(equalTo("testuser")));
     }
 
     @Test
-    public void testSetJenkinsUserBuildVarsSamlNoCase() {
+    void testSetJenkinsUserBuildVarsSamlNoCase(JenkinsRule r) {
         Map<String, String> outputVars = runSamlSecurityRealmTest(r, TEST_USER, "none");
         assertThat(outputVars.get(BuildUserVariable.ID), is(equalTo(TEST_USER)));
     }
