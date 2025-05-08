@@ -4,17 +4,15 @@ import hudson.model.Cause.UserIdCause;
 import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.SecurityRealm;
-import hudson.tasks.Mailer.UserProperty;
+import hudson.tasks.MailAddressResolver;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.saml.SamlSecurityRealm;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -73,7 +71,6 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
 
     private void setUserGroups(String userId, Map<String, String> variables) {
         try {
-            SecurityRealm realm = Jenkins.get().getSecurityRealm();
             Optional.ofNullable(User.getById(userId, false))
                     .map(User::impersonate2)
                     .map(authentication -> authentication.getAuthorities().stream()
@@ -90,13 +87,11 @@ public class UserIdCauseDeterminant implements IUsernameSettable<UserIdCause> {
         }
     }
 
-    private void setUserEmail(String userId, Map<String, String> variables) {
-        Optional.ofNullable(User.getById(userId, false))
-                .map(user -> user.getProperty(UserProperty.class))
-                .map(UserProperty::getAddress)
-                .map(StringUtils::trimToEmpty)
-                .ifPresent(address -> variables.put(BuildUserVariable.EMAIL, address));
-    }
+	private void setUserEmail(String userId, Map<String, String> variables) {
+		Optional.ofNullable(User.getById(userId, false))
+				.map(MailAddressResolver::resolve)
+				.ifPresent(email -> variables.put(BuildUserVariable.EMAIL, email));
+	}
 
     /**
      * {@inheritDoc}
