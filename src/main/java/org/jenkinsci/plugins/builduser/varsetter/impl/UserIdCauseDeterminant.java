@@ -6,7 +6,7 @@ import hudson.security.ACL;
 import hudson.security.SecurityRealm;
 import hudson.tasks.MailAddressResolver;
 import jenkins.model.Jenkins;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
 import org.jenkinsci.plugins.builduser.utils.UsernameUtils;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
