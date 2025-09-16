@@ -5,29 +5,36 @@ import hudson.model.User;
 import hudson.tasks.MailAddressResolver;
 import hudson.tasks.Mailer.UserProperty;
 import org.jenkinsci.plugins.builduser.utils.BuildUserVariable;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.TestExtension;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserIdCauseDeterminantEmailTest {
-    public static final String TEST_USER = "test_user";
+@WithJenkins
+class UserIdCauseDeterminantEmailTest {
+
+    private static final String TEST_USER = "test_user";
     
-    @Rule
-    public JenkinsRule r = new JenkinsRule();
+    private JenkinsRule r;
+
+    @BeforeEach
+    void beforeEach(JenkinsRule rule) {
+        r = rule;
+    }
 
     @Test
-    public void testSetJenkinsUserBuildVarsEmailWithResolver() throws IOException {
+    void testSetJenkinsUserBuildVarsEmailWithResolver() throws Exception {
         User user = User.getById(TEST_USER, true);
-        assert user != null;
+        assertNotNull(user);
         user.addProperty(new UserProperty(null));
 
         JenkinsRule.DummySecurityRealm realm = r.createDummySecurityRealm();
@@ -41,8 +48,10 @@ public class UserIdCauseDeterminantEmailTest {
         assertThat(outputVars.get(BuildUserVariable.EMAIL), is(equalTo("resolveduser@example.com")));
     }
 
+    @SuppressWarnings("unused")
     @TestExtension
     public static class TestMailAddressResolver extends MailAddressResolver {
+
         @Override
         public String findMailAddressFor(User user) {
             return "resolveduser@example.com";
