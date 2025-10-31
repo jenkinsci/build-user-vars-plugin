@@ -13,14 +13,14 @@ Set of **environment variables** that describe the user who started the build.
 
 The plugin provides the following environment variables:
 
-| Variable                 | Description                        |
-|--------------------------|------------------------------------|
-| BUILD\_USER              | Full name (first name + last name) |
-| BUILD\_USER\_FIRST\_NAME | First name                         |
-| BUILD\_USER\_LAST\_NAME  | Last name                          |
-| BUILD\_USER\_ID          | Jenkins user ID                    |
-| BUILD\_USER\_GROUPS      | Jenkins user groups                |
-| BUILD\_USER\_EMAIL       | Email address                      |
+| Variable              | Description                        |
+|-----------------------|------------------------------------|
+| BUILD_USER            | Full name (first name + last name) |
+| BUILD_USER_FIRST_NAME | First name                         |
+| BUILD_USER_LAST_NAME  | Last name                          |
+| BUILD_USER_ID         | Jenkins user ID                    |
+| BUILD_USER_GROUPS     | Jenkins user groups                |
+| BUILD_USER_EMAIL      | Email address                      |
 
 ## Since 1.8
 
@@ -50,7 +50,23 @@ options {
 }
 ```
 
+## Automated Triggers
+
+When builds are triggered automatically (not by a human user), the plugin sets dummy values for the core build user variables:
+
+| Trigger Type                | BUILD_USER                | BUILD_USER_FIRST_NAME | BUILD_USER_LAST_NAME | BUILD_USER_ID    |
+|-----------------------------|---------------------------|-----------------------|----------------------|------------------|
+| **Timer Trigger**           | "Timer Trigger"           | "Timer"               | "Trigger"            | "timer"          |
+| **SCM Trigger**             | "SCM Change"              | "SCM"                 | "Change"             | "scmChange"      |
+| **Branch Indexing**         | "Branch Indexing"         | "Branch"              | "Indexing"           | "branchIndexing" |
+| **Remote Trigger**          | "{host} {note}"           | "{host}"              | "{note}"             | "remoteRequest"  |
+| **Generic Webhook Trigger** | "Generic Webhook Trigger" | "Generic"             | "Webhook"            | "genericWebhook" |
+
+### Notes:
+- **BUILD_USER_ID** values are consistent identifiers you can rely on for automation detection.
+- **BUILD_USER_GROUPS** and **BUILD_USER_EMAIL** are not set for automated triggers.
+
 ## Changelog
 
-Release notes are available in [GitHub Releases](https://github.com/jenkinsci/build-user-vars-plugin/releases) since July 2020 (build-user-vars plugin 1.6 and later).
+Release notes have been available in [GitHub Releases](https://github.com/jenkinsci/build-user-vars-plugin/releases) since July 2020 (build-user-vars plugin 1.6 and later).
 Prior release notes are available in the plugin repository [changelog](https://github.com/jenkinsci/build-user-vars-plugin/blob/master/CHANGELOG.md).
