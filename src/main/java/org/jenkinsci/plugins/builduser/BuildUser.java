@@ -23,6 +23,7 @@ import jenkins.tasks.SimpleBuildWrapper;
 import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.*;
+import org.jenkinsci.plugins.gwt.GenericCause;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -114,6 +115,15 @@ public class BuildUser extends SimpleBuildWrapper {
         RemoteCause remoteTriggerCause = build.getCause(RemoteCause.class);
         if (new RemoteCauseDeterminant().setJenkinsUserBuildVars(remoteTriggerCause, variables)) {
             return;
+        }
+
+        try {
+            GenericCause genericCause = build.getCause(GenericCause.class);
+            if (new GenericCauseDeterminant().setJenkinsUserBuildVars(genericCause, variables)) {
+                return;
+            }
+        } catch (NoClassDefFoundError e) {
+            log.fine("It seems the generic-webhook-trigger-plugin is not installed, skipping.");
         }
 
         try {
