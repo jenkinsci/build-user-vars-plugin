@@ -20,7 +20,6 @@ import jenkins.branch.BranchEventCause;
 import jenkins.branch.BranchIndexingCause;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildWrapper;
-import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.builduser.varsetter.IUsernameSettable;
 import org.jenkinsci.plugins.builduser.varsetter.impl.*;
 import org.jenkinsci.plugins.gwt.GenericCause;
@@ -43,7 +42,7 @@ public class BuildUser extends SimpleBuildWrapper {
 
     private static final Logger log = Logger.getLogger(BuildUser.class.getName());
 
-    private static final String EXTENSION_DISPLAY_NAME = "Set jenkins user build variables";
+    static final String EXTENSION_DISPLAY_NAME = "Set jenkins user build variables";
 
 
     @DataBoundConstructor
@@ -145,7 +144,6 @@ public class BuildUser extends SimpleBuildWrapper {
     }
 
     @Extension
-    @Symbol("withBuildUser")
     public static class DescriptorImpl extends BuildWrapperDescriptor {
         @Override
         public boolean isApplicable(AbstractProject<?, ?> item) {
