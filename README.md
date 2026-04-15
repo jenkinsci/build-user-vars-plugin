@@ -1,6 +1,6 @@
 # Build User Vars Plugin
 
-[![Build Status](https://ci.jenkins.io/job/Plugins/job/build-user-vars-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/build-user-vars-plugin/job/master/)
+[![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins%2Fbuild-user-vars-plugin%2Fmaster)](https://ci.jenkins.io/job/Plugins/job/build-user-vars-plugin/job/master/)
 [![Coverage](https://ci.jenkins.io/job/Plugins/job/build-user-vars-plugin/job/master/badge/icon?status=${instructionCoverage}&subject=coverage&color=${colorInstructionCoverage})](https://ci.jenkins.io/job/Plugins/job/build-user-vars-plugin/job/master/coverage)
 [![Contributors](https://img.shields.io/github/contributors/jenkinsci/build-user-vars-plugin.svg)](https://github.com/jenkinsci/build-user-vars-plugin/graphs/contributors)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/build-user-vars-plugin.svg)](https://plugins.jenkins.io/build-user-vars-plugin)
